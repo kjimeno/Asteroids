@@ -74,6 +74,9 @@ class Ship extends Actor {
   display() {
     push();
 
+    stroke(255);
+    fill(0);
+
     translate(this.position);
     rotate(this.rotation);
 

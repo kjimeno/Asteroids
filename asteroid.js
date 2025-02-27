@@ -38,6 +38,9 @@ class Asteroid extends Actor {
     push();
     translate(this.position);
 
+    stroke(255);
+    fill(0);
+
     //Draw out the polygon based on the positions of the vertices from the vertix array
     beginShape();
     for (let i = 0; i < this.vertices.length; i++) {
