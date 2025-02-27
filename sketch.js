@@ -4,7 +4,7 @@ const shipRotation = 0.1;
 const shipThrustPower = 0.15;
 const shipDragForce = 0.98;
 
-let gameManager;
+let asteroid;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -21,8 +21,17 @@ function setup() {
     shipDragForce
   );
 
-  gameManager = new GameManager();
-  gameManager.spawnAsteroids();
+  let asteroidPos = createVector(windowWidth / 4, windowHeight / 4);
+  let asteroidLargeSize = 80;
+  let asteroidNumVertices = 20;
+  let asteroidShapeStrength = 0.12;
+  asteroid = new Asteroid(
+    asteroidPos,
+    asteroidLargeSize,
+    asteroidNumVertices,
+    asteroidShapeStrength
+  );
+  asteroid.initialize();
 }
 
 function draw() {
@@ -30,4 +39,7 @@ function draw() {
   ship.processInput();
   ship.update();
   ship.display();
+
+  asteroid.update();
+  asteroid.display();
 }

@@ -76,7 +76,7 @@ class Ship {
   display() {
     push();
 
-    translate(this.position.x, this.position.y);
+    translate(this.position);
     rotate(this.rotation);
 
     triangle(
