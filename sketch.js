@@ -4,6 +4,8 @@ const shipRotation = 0.1;
 const shipThrustPower = 0.15;
 const shipDragForce = 0.98;
 
+let gameManager;
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
@@ -18,6 +20,9 @@ function setup() {
     shipThrustPower,
     shipDragForce
   );
+
+  gameManager = new GameManager();
+  gameManager.spawnAsteroids();
 }
 
 function draw() {
