@@ -1,10 +1,7 @@
 class Asteroid extends Actor {
-  constructor(position, size, rotation, speed, numVertices, shapeStrength) {
-    super();
-    this.position = position;
+  constructor(position, size, rotation, moveSpeed, numVertices, shapeStrength) {
+    super(position, size, rotation, moveSpeed);
     this.radius = size / 2;
-    this.rotation = rotation;
-    this.speed = speed;
     this.numVertices = numVertices;
     this.vertices = [];
     this.radiusMaxOffset = size * shapeStrength;
@@ -31,8 +28,8 @@ class Asteroid extends Actor {
   update() {
     //calculate the distance travelled
     let dist = createVector(
-      cos(this.rotation) * this.speed,
-      sin(this.rotation) * this.speed
+      cos(this.rotation) * this.moveSpeed,
+      sin(this.rotation) * this.moveSpeed
     );
     this.position.add(dist);
   }

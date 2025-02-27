@@ -1,13 +1,10 @@
 class Ship extends Actor {
-  constructor(position, size, rotation, rotationSpeed, thrustPower, dragForce) {
-    super();
-    this.position = position;
-    this.size = size;
+  constructor(position, size, rotation, rotationSpeed, moveSpeed, dragForce) {
+    super(position, size, rotation, moveSpeed);
     this.initSize = size;
-    this.rotation = rotation;
     this.rotationSpeed = rotationSpeed;
     this.velocity = createVector(0, 0);
-    this.thrustPower = thrustPower;
+    this.thrustPower = moveSpeed;
     this.dragForce = dragForce;
     this.teleportActive = false;
     this.teleportShrinking = false;
