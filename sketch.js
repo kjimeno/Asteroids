@@ -23,11 +23,15 @@ function setup() {
 
   let asteroidPos = createVector(windowWidth / 4, windowHeight / 4);
   let asteroidLargeSize = 80;
+  let asteroidRot = random(TWO_PI);
+  let asteroidSpeed = 0.5;
   let asteroidNumVertices = 20;
   let asteroidShapeStrength = 0.12;
   asteroid = new Asteroid(
     asteroidPos,
     asteroidLargeSize,
+    asteroidRot,
+    asteroidSpeed,
     asteroidNumVertices,
     asteroidShapeStrength
   );

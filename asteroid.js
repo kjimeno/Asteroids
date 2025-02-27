@@ -1,7 +1,9 @@
 class Asteroid {
-  constructor(position, size, numVertices, shapeStrength) {
+  constructor(position, size, rotation, speed, numVertices, shapeStrength) {
     this.position = position;
     this.radius = size / 2;
+    this.rotation = rotation;
+    this.speed = speed;
     this.numVertices = numVertices;
     this.vertices = [];
     this.radiusMaxOffset = size * shapeStrength;
@@ -25,7 +27,13 @@ class Asteroid {
     }
   }
 
-  update() {}
+  update() {
+    let dist = createVector(
+      cos(this.rotation) * this.speed,
+      sin(this.rotation) * this.speed
+    );
+    this.position.add(dist);
+  }
 
   display() {
     push();
