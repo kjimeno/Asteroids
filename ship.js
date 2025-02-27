@@ -9,6 +9,7 @@ class Ship extends Actor {
     this.teleportActive = false;
     this.teleportShrinking = false;
     this.teleportAnimSpeed = 0.8;
+    this.fireShot = false;
   }
 
   processInput() {
@@ -32,9 +33,18 @@ class Ship extends Actor {
       );
     }
 
+    //'S' is pressed
     if (keyIsDown(83) && !this.teleportActive) {
       this.teleportActive = true;
       this.teleportShrinking = true;
+    }
+
+    //Space Bar is pressed
+    if (keyIsDown(32) && !this.teleportActive && !this.fireShot) {
+      this.fireShot = true;
+      console.log("FIRE!");
+    } else if (!keyIsDown(32) && !this.teleportActive) {
+      this.fireShot = false;
     }
   }
 
