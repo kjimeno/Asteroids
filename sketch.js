@@ -23,12 +23,12 @@ function setup() {
     shipDragForce
   );
 
-  gameManager = new GameManager(1, 0);
+  gameManager = new GameManager(2, 0);
   gameManager.startGame();
 }
 
 function draw() {
-  background(255, 90);
+  background(255);
   ship.processInput();
   ship.update();
   ship.display();

@@ -3,15 +3,7 @@ class GameManager {
     this.numAsteroids = numAsteroids;
     this.numSaucers = numSaucers;
     this.score = 0;
-
-    this.AsteroidProperties = {
-      POSITION: createVector(windowWidth / 4, windowHeight / 4),
-      ROTATION: random(TWO_PI),
-      SPEED: 0.5,
-      NUM_VERTICES: 20,
-      SHAPE_STRENGTH: 0.12,
-      LARGE_SIZE: 80,
-    };
+    this.asteroids = [];
   }
 
   startGame() {
@@ -20,20 +12,34 @@ class GameManager {
   }
 
   update() {
-    asteroid.update();
-    asteroid.display();
+    for (let i = 0; i < this.numAsteroids; i++) {
+      this.asteroids[i].update();
+      this.asteroids[i].display();
+    }
   }
 
   spawnAsteroids() {
-    asteroid = new Asteroid(
-      this.AsteroidProperties.POSITION,
-      this.AsteroidProperties.LARGE_SIZE,
-      this.AsteroidProperties.ROTATION,
-      this.AsteroidProperties.SPEED,
-      this.AsteroidProperties.NUM_VERTICES,
-      this.AsteroidProperties.SHAPE_STRENGTH
-    );
-    asteroid.initialize();
+    for (let i = 0; i < this.numAsteroids; i++) {
+      let position = createVector(random(windowWidth), random(windowHeight));
+      let rotation = random(TWO_PI);
+      let speed = 0.5;
+      let numVertices = 20;
+      let shapeStrength = 0.12;
+      let largeSize = 80;
+
+      asteroid = new Asteroid(
+        position,
+        largeSize,
+        rotation,
+        speed,
+        numVertices,
+        shapeStrength
+      );
+
+      asteroid.initialize();
+
+      this.asteroids.push(asteroid);
+    }
   }
 
   spawnShip() {}
