@@ -7,7 +7,7 @@ class Asteroid extends Actor {
     this.radiusMaxOffset = size * shapeStrength;
   }
 
-  initialize() {
+  setupShape() {
     //Set up the shape (vertices)
     for (let i = 0; i < this.numVertices; i++) {
       let angle = (i * TWO_PI) / this.numVertices;
