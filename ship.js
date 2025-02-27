@@ -1,5 +1,6 @@
-class Ship {
+class Ship extends Actor {
   constructor(position, size, rotation, rotationSpeed, thrustPower, dragForce) {
+    super();
     this.position = position;
     this.size = size;
     this.initSize = size;

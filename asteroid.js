@@ -1,5 +1,6 @@
-class Asteroid {
+class Asteroid extends Actor {
   constructor(position, size, rotation, speed, numVertices, shapeStrength) {
+    super();
     this.position = position;
     this.radius = size / 2;
     this.rotation = rotation;
@@ -28,6 +29,7 @@ class Asteroid {
   }
 
   update() {
+    //calculate the distance travelled
     let dist = createVector(
       cos(this.rotation) * this.speed,
       sin(this.rotation) * this.speed
