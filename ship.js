@@ -11,31 +11,31 @@ class Ship extends Actor {
     this.teleportAnimSpeed = 0.8;
   }
 
-  processInput() {
-    //'A' is pressed
-    if (keyIsDown(65)) {
-      this.rotation -= this.rotationSpeed;
-    }
+  //'A' is pressed
+  rotateCounterClockwise() {
+    this.rotation -= this.rotationSpeed;
+  }
 
-    //'D' is pressed
-    if (keyIsDown(68)) {
-      this.rotation += this.rotationSpeed;
-    }
+  rotateClockwise() {
+    this.rotation += this.rotationSpeed;
+  }
 
-    //'W' is pressed
-    if (keyIsDown(87)) {
-      this.velocity.add(
-        createVector(
-          cos(this.rotation) * this.thrustPower,
-          sin(this.rotation) * this.thrustPower
-        )
-      );
-    }
+  thrustForward() {
+    this.velocity.add(
+      createVector(
+        cos(this.rotation) * this.thrustPower,
+        sin(this.rotation) * this.thrustPower
+      )
+    );
+  }
 
-    if (keyIsDown(83) && !this.teleportActive) {
-      this.teleportActive = true;
-      this.teleportShrinking = true;
-    }
+  teleport() {
+    this.teleportActive = true;
+    this.teleportShrinking = true;
+  }
+
+  getTeleportActive() {
+    return this.teleportActive;
   }
 
   update() {

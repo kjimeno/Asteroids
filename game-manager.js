@@ -5,6 +5,7 @@ class GameManager {
     this.score = 0;
     this.asteroids = [];
     this.ship;
+    this.spaceDown = false;
   }
 
   startGame() {
@@ -14,13 +15,43 @@ class GameManager {
   }
 
   update() {
-    this.ship.processInput();
+    this.processInput();
     this.ship.update();
     this.ship.display();
 
     for (let i = 0; i < this.numAsteroids; i++) {
       this.asteroids[i].update();
       this.asteroids[i].display();
+    }
+  }
+
+  processInput() {
+    //'A' is pressed
+    if (keyIsDown(65)) {
+      this.ship.rotateCounterClockwise();
+    }
+
+    //'D' is pressed
+    if (keyIsDown(68)) {
+      this.ship.rotateClockwise();
+    }
+
+    //'W' is pressed
+    if (keyIsDown(87)) {
+      this.ship.thrustForward();
+    }
+
+    //'S' is pressed
+    if (keyIsDown(83) && !this.ship.getTeleportActive()) {
+      this.ship.teleport();
+    }
+
+    //Space Bar is pressed
+    if (keyIsDown(32) && !this.teleportActive && !this.spaceDown) {
+      this.spaceDown = true;
+      console.log("FIRE!");
+    } else if (!keyIsDown(32) && !this.teleportActive) {
+      this.spaceDown = false;
     }
   }
 
