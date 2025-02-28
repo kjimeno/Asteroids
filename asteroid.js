@@ -25,15 +25,6 @@ class Asteroid extends Actor {
     }
   }
 
-  update() {
-    //calculate the distance travelled
-    let dist = createVector(
-      cos(this.rotation) * this.moveSpeed,
-      sin(this.rotation) * this.moveSpeed
-    );
-    this.position.add(dist);
-  }
-
   display() {
     push();
     translate(this.position);

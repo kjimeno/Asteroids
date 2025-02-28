@@ -42,6 +42,10 @@ class Ship extends Actor {
     return this.position;
   }
 
+  getRotation() {
+    return this.rotation;
+  }
+
   update() {
     //Update the velocity and position based on the drag force
     this.velocity.mult(this.dragForce);

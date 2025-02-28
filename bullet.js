@@ -1,6 +1,4 @@
 class Bullet extends Actor {
-  update() {}
-
   display() {
     push();
 

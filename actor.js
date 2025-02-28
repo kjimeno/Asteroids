@@ -5,4 +5,13 @@ class Actor {
     this.rotation = rotation;
     this.moveSpeed = moveSpeed;
   }
+
+  update() {
+    //calculate the distance travelled
+    let dist = createVector(
+      cos(this.rotation) * this.moveSpeed,
+      sin(this.rotation) * this.moveSpeed
+    );
+    this.position.add(dist);
+  }
 }
