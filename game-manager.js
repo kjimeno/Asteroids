@@ -6,6 +6,7 @@ class GameManager {
     this.asteroids = [];
     this.ship;
     this.spaceDown = false;
+    this.shipBullets = [];
   }
 
   startGame() {
@@ -16,12 +17,20 @@ class GameManager {
 
   update() {
     this.processInput();
+
+    //Ship
     this.ship.update();
     this.ship.display();
 
+    //Asteroids
     for (let i = 0; i < this.numAsteroids; i++) {
       this.asteroids[i].update();
       this.asteroids[i].display();
+    }
+
+    //Bullets
+    for (let i = 0; i < this.shipBullets.length; i++) {
+      this.shipBullets[i].display();
     }
   }
 
@@ -49,27 +58,48 @@ class GameManager {
     //Space Bar is pressed
     if (keyIsDown(32) && !this.ship.getTeleportActive() && !this.spaceDown) {
       this.spaceDown = true;
-      console.log("FIRE!");
+
+      let isFriendly = true;
+      this.spawnBullet(isFriendly);
     } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
       this.spaceDown = false;
+    }
+  }
+
+  spawnBullet(friendly) {
+    if (friendly) {
+      //Bullet Properties:
+      const size = 3;
+      const speed = 0;
+      const position = createVector(
+        this.ship.getPosition().x,
+        this.ship.getPosition().y
+      );
+      const rotation = -PI / 2;
+      console.log("TEST");
+
+      let bullet = new Bullet(position, size, rotation, speed);
+      this.shipBullets.push(bullet);
+    } else {
+      //Enemy Bullet Properties:
     }
   }
 
   spawnShip() {
     //Ship Properties:
     const size = 20;
-    const rotation = 0.1;
+    const rotationSpeed = 0.1;
     const thrustPower = 0.15;
     const dragForce = 0.98;
     const position = createVector(width / 2, height / 2);
-    const rotoation = -PI / 2;
+    const rotation = -PI / 2;
 
     //Create the Spaceship
     this.ship = new Ship(
       position,
       size,
-      rotoation,
       rotation,
+      rotationSpeed,
       thrustPower,
       dragForce
     );

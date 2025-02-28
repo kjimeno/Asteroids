@@ -38,6 +38,10 @@ class Ship extends Actor {
     return this.teleportActive;
   }
 
+  getPosition() {
+    return this.position;
+  }
+
   update() {
     //Update the velocity and position based on the drag force
     this.velocity.mult(this.dragForce);
