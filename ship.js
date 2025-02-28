@@ -9,6 +9,7 @@ class Ship extends Actor {
     this.teleportActive = false;
     this.teleportShrinking = false;
     this.teleportAnimSpeed = 0.8;
+    this.fireShot = false;
   }
 
   rotateCounterClockwise() {
