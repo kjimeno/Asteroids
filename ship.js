@@ -11,7 +11,6 @@ class Ship extends Actor {
     this.teleportAnimSpeed = 0.8;
   }
 
-  //'A' is pressed
   rotateCounterClockwise() {
     this.rotation -= this.rotationSpeed;
   }

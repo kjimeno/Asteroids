@@ -47,10 +47,10 @@ class GameManager {
     }
 
     //Space Bar is pressed
-    if (keyIsDown(32) && !this.teleportActive && !this.spaceDown) {
+    if (keyIsDown(32) && !this.ship.getTeleportActive() && !this.spaceDown) {
       this.spaceDown = true;
       console.log("FIRE!");
-    } else if (!keyIsDown(32) && !this.teleportActive) {
+    } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
       this.spaceDown = false;
     }
   }
