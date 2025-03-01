@@ -85,6 +85,8 @@ class Ship extends Actor {
       this.size = this.initSize;
       this.teleportActive = false;
     }
+
+    this.wrapWithinScreen();
   }
 
   display() {
