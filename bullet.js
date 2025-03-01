@@ -1,4 +1,8 @@
 class Bullet extends Actor {
+  constructor(position, size, rotation, speed) {
+    super(position, size, rotation, speed);
+  }
+
   display() {
     push();
 

@@ -38,12 +38,20 @@ class Ship extends Actor {
     return this.teleportActive;
   }
 
-  getPosition() {
-    return this.position;
+  getBulletPosition() {
+    //position (Vector2) + size
+    let xBulletLoc = this.position.x + (cos(this.rotation) * this.size) / 2;
+    let yBulletLoc = this.position.y + (sin(this.rotation) * this.size) / 2;
+
+    return createVector(xBulletLoc, yBulletLoc);
   }
 
   getRotation() {
     return this.rotation;
+  }
+
+  getSize() {
+    return this.initSize;
   }
 
   update() {

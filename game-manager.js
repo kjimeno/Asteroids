@@ -18,12 +18,6 @@ class GameManager {
   update() {
     this.processInput();
 
-    //Asteroids
-    for (let i = 0; i < this.numAsteroids; i++) {
-      this.asteroids[i].update();
-      this.asteroids[i].display();
-    }
-
     //Bullets
     for (let i = 0; i < this.shipBullets.length; i++) {
       this.shipBullets[i].update();
@@ -33,6 +27,12 @@ class GameManager {
     //Ship
     this.ship.update();
     this.ship.display();
+
+    //Asteroids
+    for (let i = 0; i < this.numAsteroids; i++) {
+      this.asteroids[i].update();
+      this.asteroids[i].display();
+    }
   }
 
   processInput() {
@@ -71,11 +71,8 @@ class GameManager {
     if (friendly) {
       //Bullet Properties:
       const size = 3;
-      const speed = 5;
-      const position = createVector(
-        this.ship.getPosition().x,
-        this.ship.getPosition().y
-      );
+      const speed = 8;
+      const position = this.ship.getBulletPosition();
       const rotation = this.ship.getRotation();
 
       let bullet = new Bullet(position, size, rotation, speed);
