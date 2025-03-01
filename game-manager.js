@@ -37,29 +37,28 @@ class GameManager {
     for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].update();
       this.asteroids[i].display();
-    }
 
-    this.handleCollisions();
+      //Destroys asteroid if hit
+      this.handleCollision(this.asteroids[i], i);
+    }
   }
 
-  handleCollisions() {
-    //Check collision for the asteroids
+  handleCollision(actor, position) {
+    //Check collision for the asteroids{
+    for (let j = 0; j < this.shipBullets.length; j++) {
+      let distBetween = actor
+        .getPosition()
+        .dist(this.shipBullets[j].getPosition());
 
-    for (let i = 0; i < this.asteroids.length; i++) {
-      for (let j = 0; j < this.shipBullets.length; j++) {
-        let distBetween = this.asteroids[i]
-          .getPosition()
-          .dist(this.shipBullets[j].getPosition());
-        let collideDistance =
-          this.asteroids[i].getSize() / 2 + this.shipBullets[j].getSize() / 2;
+      let collideDistance =
+        actor.getSize() / 2 + this.shipBullets[j].getSize() / 2;
 
-        if (distBetween <= collideDistance) {
-          this.shipBullets[j].setVisible(false);
-          this.shipBullets.splice(j, 1);
+      if (distBetween <= collideDistance) {
+        this.shipBullets[j].setVisible(false);
+        this.shipBullets.splice(j, 1);
 
-          this.asteroids[i].setVisible(false);
-          this.asteroids.splice(i, 1);
-        }
+        actor.setVisible(false);
+        this.asteroids.splice(position, 1);
       }
     }
   }

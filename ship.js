@@ -50,15 +50,16 @@ class Ship extends Actor {
     return this.rotation;
   }
 
-  getSize() {
-    return this.initSize;
-  }
-
   update() {
     //Update the velocity and position based on the drag force
     this.velocity.mult(this.dragForce);
     this.position.add(this.velocity);
 
+    this.handleTeleportAnim();
+    this.wrapWithinScreen();
+  }
+
+  handleTeleportAnim() {
     //If the ship is teleporting, currently shrinking, and is not small enough ==> keep shrinking its size
     if (this.teleportActive && this.teleportShrinking && this.size >= 0.1) {
       this.size *= this.teleportAnimSpeed;
@@ -85,8 +86,6 @@ class Ship extends Actor {
       this.size = this.initSize;
       this.teleportActive = false;
     }
-
-    this.wrapWithinScreen();
   }
 
   display() {
