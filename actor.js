@@ -4,6 +4,7 @@ class Actor {
     this.size = size;
     this.rotation = rotation;
     this.moveSpeed = moveSpeed;
+    this.visible = true;
   }
 
   update() {
@@ -35,5 +36,21 @@ class Actor {
     else if (this.position.y - this.size / 2 > windowHeight) {
       this.position.y = -this.size / 2;
     }
+  }
+
+  getSize() {
+    return this.size;
+  }
+
+  getPosition() {
+    return this.position;
+  }
+
+  setVisible(enabled) {
+    this.visible = enabled;
+  }
+
+  getVisibility() {
+    return this.visible;
   }
 }

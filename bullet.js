@@ -3,7 +3,6 @@ class Bullet extends Actor {
     super(position, size, rotation, speed);
     this.lifeTime = 1000;
     this.lifeTimer = 0;
-    this.visible = true;
   }
 
   update() {
@@ -13,10 +12,6 @@ class Bullet extends Actor {
     if (this.lifeTimer >= this.lifeTime) {
       this.visible = false;
     }
-  }
-
-  getVisibility() {
-    return this.visible;
   }
 
   display() {
@@ -32,9 +27,5 @@ class Bullet extends Actor {
     }
 
     pop();
-  }
-
-  setVisible(enabled) {
-    this.visible = enabled;
   }
 }

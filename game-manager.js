@@ -1,6 +1,6 @@
 class GameManager {
-  constructor(numAsteroids, numSaucers) {
-    this.numAsteroids = numAsteroids;
+  constructor(initNumAsteroids, numSaucers) {
+    this.initNumAsteroids = initNumAsteroids;
     this.numSaucers = numSaucers;
     this.score = 0;
     this.asteroids = [];
@@ -23,6 +23,7 @@ class GameManager {
       this.shipBullets[i].update();
       this.shipBullets[i].display();
 
+      //If the ship bullet is destroyed, then remove it from the array
       if (!this.shipBullets[i].getVisibility()) {
         this.shipBullets.splice(i, 1);
       }
@@ -33,9 +34,33 @@ class GameManager {
     this.ship.display();
 
     //Asteroids
-    for (let i = 0; i < this.numAsteroids; i++) {
+    for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].update();
       this.asteroids[i].display();
+    }
+
+    this.handleCollisions();
+  }
+
+  handleCollisions() {
+    //Check collision for the asteroids
+
+    for (let i = 0; i < this.asteroids.length; i++) {
+      for (let j = 0; j < this.shipBullets.length; j++) {
+        let distBetween = this.asteroids[i]
+          .getPosition()
+          .dist(this.shipBullets[j].getPosition());
+        let collideDistance =
+          this.asteroids[i].getSize() / 2 + this.shipBullets[j].getSize() / 2;
+
+        if (distBetween <= collideDistance) {
+          this.shipBullets[j].setVisible(false);
+          this.shipBullets.splice(j, 1);
+
+          this.asteroids[i].setVisible(false);
+          this.asteroids.splice(i, 1);
+        }
+      }
     }
   }
 
@@ -107,7 +132,7 @@ class GameManager {
   }
 
   spawnAsteroids() {
-    for (let i = 0; i < this.numAsteroids; i++) {
+    for (let i = 0; i < this.initNumAsteroids; i++) {
       //Asteroid Properties:
       const position = createVector(random(windowWidth), random(windowHeight));
       const rotation = random(TWO_PI);
