@@ -22,6 +22,10 @@ class GameManager {
     for (let i = 0; i < this.shipBullets.length; i++) {
       this.shipBullets[i].update();
       this.shipBullets[i].display();
+
+      if (!this.shipBullets[i].getVisibility()) {
+        this.shipBullets.splice(i, 1);
+      }
     }
 
     //Ship
