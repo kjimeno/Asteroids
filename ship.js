@@ -10,6 +10,7 @@ class Ship extends Actor {
     this.teleportShrinking = false;
     this.teleportAnimSpeed = 0.8;
     this.fireShot = false;
+    this.respawning = false;
   }
 
   rotateCounterClockwise() {
@@ -48,6 +49,14 @@ class Ship extends Actor {
 
   getRotation() {
     return this.rotation;
+  }
+
+  getRespawning() {
+    return this.respawning;
+  }
+
+  die() {
+    this.respawning = true;
   }
 
   update() {

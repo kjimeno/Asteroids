@@ -30,8 +30,10 @@ class GameManager {
     }
 
     //Ship
-    this.ship.update();
-    this.ship.display();
+    if (!this.ship.getRespawning()) {
+      this.ship.update();
+      this.ship.display();
+    }
 
     //Asteroids
     for (let i = 0; i < this.asteroids.length; i++) {
@@ -44,7 +46,7 @@ class GameManager {
   }
 
   handleCollision(actor, position) {
-    //Check collision for the asteroids{
+    //Check collision if actor is hitting the bullets
     for (let j = 0; j < this.shipBullets.length; j++) {
       let distBetween = actor
         .getPosition()
@@ -60,6 +62,18 @@ class GameManager {
         actor.setVisible(false);
         this.asteroids.splice(position, 1);
       }
+    }
+
+    //Check collision if actor is hitting the ship
+    let distBetween = actor.getPosition().dist(this.ship.getPosition());
+    let collideDist = actor.getSize() / 2 + this.ship.getSize() / 2;
+
+    if (distBetween <= collideDist) {
+      actor.setVisible(false);
+      this.asteroids.splice(position, 1);
+
+      this.ship.setVisible(false);
+      this.ship.die();
     }
   }
 
@@ -99,7 +113,7 @@ class GameManager {
     if (friendly) {
       //Bullet Properties:
       const size = 3;
-      const speed = 8;
+      const speed = 13;
       const position = this.ship.getBulletPosition();
       const rotation = this.ship.getRotation();
 
