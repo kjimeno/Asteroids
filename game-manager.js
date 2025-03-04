@@ -55,12 +55,19 @@ class GameManager {
       let collideDistance =
         actor.getSize() / 2 + this.shipBullets[j].getSize() / 2;
 
+      //If colliding with the ship's bullets
       if (distBetween <= collideDistance) {
+        //Destroy ship
         this.shipBullets[j].setVisible(false);
         this.shipBullets.splice(j, 1);
 
+        //Destroy this actor
         actor.setVisible(false);
         this.asteroids.splice(position, 1);
+
+        //Add to the total score
+        this.score += 50;
+        console.log(this.score);
       }
     }
 
@@ -68,10 +75,13 @@ class GameManager {
     let distBetween = actor.getPosition().dist(this.ship.getPosition());
     let collideDist = actor.getSize() / 2 + this.ship.getSize() / 2;
 
+    //If colliding with the ship
     if (distBetween <= collideDist) {
+      //Destroy this actor
       actor.setVisible(false);
       this.asteroids.splice(position, 1);
 
+      //Destroy the ship
       this.ship.setVisible(false);
       this.ship.die();
     }
