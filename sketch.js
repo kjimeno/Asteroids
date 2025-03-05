@@ -1,7 +1,7 @@
 let gameManager;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth * 0.99, windowHeight * 0.99);
 
   gameManager = new GameManager(4, 0);
   gameManager.startGame();
