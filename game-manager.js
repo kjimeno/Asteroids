@@ -127,22 +127,22 @@ class GameManager {
 
   processInput() {
     //'A' is pressed
-    if (keyIsDown(65)) {
+    if (keyIsDown(65) || keyIsDown(37)) {
       this.ship.rotateCounterClockwise();
     }
 
     //'D' is pressed
-    if (keyIsDown(68)) {
+    if (keyIsDown(68) || keyIsDown(39)) {
       this.ship.rotateClockwise();
     }
 
     //'W' is pressed
-    if (keyIsDown(87)) {
+    if (keyIsDown(87) || keyIsDown(38)) {
       this.ship.thrustForward();
     }
 
     //'S' is pressed
-    if (keyIsDown(83) && !this.ship.getTeleportActive()) {
+    if ((keyIsDown(83) || keyIsDown(40)) && !this.ship.getTeleportActive()) {
       this.ship.teleport();
     }
 
