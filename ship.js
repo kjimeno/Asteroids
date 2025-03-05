@@ -15,6 +15,7 @@ class Ship extends Actor {
     this.invincibleTime = 14;
     this.invincibleAnimSpeed = 0.005;
     this.invincible = true;
+    this.isMovingForward = false;
   }
 
   rotateCounterClockwise() {
@@ -26,6 +27,7 @@ class Ship extends Actor {
   }
 
   thrustForward() {
+    this.isMovingForward = true;
     this.velocity.add(
       createVector(
         cos(this.rotation) * this.thrustPower,
@@ -41,6 +43,10 @@ class Ship extends Actor {
 
   getTeleportActive() {
     return this.teleportActive;
+  }
+
+  setIsMovingForward(isTrue) {
+    this.isMovingForward = isTrue;
   }
 
   getBulletPosition() {
@@ -125,6 +131,7 @@ class Ship extends Actor {
       translate(this.position);
       rotate(this.rotation);
 
+      //Draw the ship's base shape (Triangle)
       triangle(
         -this.size / 2,
         this.size / 2,
@@ -133,6 +140,20 @@ class Ship extends Actor {
         this.size / 2,
         0
       );
+
+      //Draw the ship's thruster flames
+      //
+      if (this.isMovingForward) {
+        stroke("red");
+        triangle(
+          (-this.size * 1.5) / 2,
+          this.size / 4,
+          (-this.size * 1.5) / 2,
+          -this.size / 4,
+          (-this.size * 2) / 2,
+          0
+        );
+      }
 
       pop();
     }

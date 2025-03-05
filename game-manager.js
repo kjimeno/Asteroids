@@ -123,7 +123,6 @@ class GameManager {
 
       //Reduce the number of lives
       this.numLives--;
-      console.log(this.numLives);
 
       //Respawn the ship if they still have a life
       if (this.numLives >= 1) {
@@ -174,6 +173,8 @@ class GameManager {
     //'W' is pressed
     if (keyIsDown(87) || keyIsDown(38)) {
       this.ship.thrustForward();
+    } else {
+      this.ship.setIsMovingForward(false);
     }
 
     //'S' is pressed
