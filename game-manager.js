@@ -11,6 +11,7 @@ class GameManager {
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.asteroidOffsetSpawn = 15;
+    this.lastScoreMilestone = 0;
   }
 
   startGame() {
@@ -94,7 +95,12 @@ class GameManager {
             this.score += this.AsteroidValue.SMALL;
             break;
         }
-        console.log(this.score);
+
+        //Gain an extra life for every 10,000 points scored
+        if (this.score - this.lastScoreMilestone >= 10000) {
+          this.lastScoreMilestone += 10000;
+          this.numLives++;
+        }
       }
     }
 
