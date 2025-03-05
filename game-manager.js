@@ -53,6 +53,9 @@ class GameManager {
       //Destroys asteroid if hit
       this.handleCollision(this.asteroids[i], i);
     }
+
+    //HUD
+    this.displayHUD();
   }
 
   handleCollision(actor, position) {
@@ -231,5 +234,18 @@ class GameManager {
 
     //Add to the Asteroids Array
     this.asteroids.push(asteroid);
+  }
+
+  displayHUD() {
+    const offsetFromEdge = 50;
+
+    fill(255);
+    textSize(20);
+    text("SCORE: " + this.score, windowWidth / 2, offsetFromEdge);
+    text(
+      "NUMBER OF LIVES: " + this.numLives,
+      windowWidth / 2,
+      windowHeight - offsetFromEdge
+    );
   }
 }

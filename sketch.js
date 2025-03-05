@@ -1,7 +1,14 @@
 let gameManager;
+let font;
+
+function preload() {
+  font = loadFont("assets/fonts/pixelated.ttf");
+}
 
 function setup() {
   createCanvas(windowWidth * 0.99, windowHeight * 0.99);
+  textAlign(CENTER);
+  textFont(font);
 
   gameManager = new GameManager(4, 0);
   gameManager.startGame();
