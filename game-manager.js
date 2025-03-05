@@ -12,6 +12,7 @@ class GameManager {
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.asteroidOffsetSpawn = 15;
     this.lastScoreMilestone = 0;
+    this.gameIsOver = false;
   }
 
   startGame() {
@@ -22,9 +23,15 @@ class GameManager {
     }
     this.score = 0;
     this.numLives = 3;
+    this.gameIsOver = false;
   }
 
   update() {
+    if (this.gameIsOver) {
+      this.displayGameOverScreen();
+      return;
+    }
+
     if (this.ship.getAlive()) {
       this.processInput();
     }
@@ -125,6 +132,8 @@ class GameManager {
         //Destroy the ship
         this.ship.setVisible(false);
         this.ship.die();
+
+        this.gameIsOver = true;
       }
 
       spawnSmallerAsteroids = true;
@@ -242,6 +251,7 @@ class GameManager {
     this.asteroids.push(asteroid);
   }
 
+  //Displays the player's score and the number of lives left
   displayHUD() {
     const offsetFromEdge = 50;
 
@@ -252,6 +262,21 @@ class GameManager {
       "NUMBER OF LIVES: " + this.numLives,
       windowWidth / 2,
       windowHeight - offsetFromEdge
+    );
+  }
+
+  //Displays the game over screen and the score
+  displayGameOverScreen() {
+    let scoreTextOffset = 50;
+
+    fill(255);
+    textSize(60);
+    text("GAME OVER!", windowWidth / 2, windowHeight / 2);
+    textSize(20);
+    text(
+      "YOUR TOTAL SCORE: " + this.score,
+      windowWidth / 2,
+      windowHeight / 2 + scoreTextOffset
     );
   }
 }
