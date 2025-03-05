@@ -32,7 +32,7 @@ class GameManager {
     }
 
     //Ship
-    if (!this.ship.getRespawning()) {
+    if (this.ship.getAlive()) {
       this.ship.update();
       this.ship.display();
     }
@@ -83,16 +83,17 @@ class GameManager {
       actor.setVisible(false);
       this.asteroids.splice(position, 1);
 
-      //Destroy the ship
-      this.ship.setVisible(false);
-      this.ship.die();
-
       //Reduce the number of lives
       this.numLives--;
       console.log(this.numLives);
 
+      //Respawn the ship if they still have a life
       if (this.numLives >= 1) {
         this.spawnShip();
+      } else {
+        //Destroy the ship
+        this.ship.setVisible(false);
+        this.ship.die();
       }
     }
   }
