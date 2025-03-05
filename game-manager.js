@@ -9,6 +9,7 @@ class GameManager {
     this.spaceDown = false;
     this.shipBullets = [];
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
+    this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.asteroidOffsetSpawn = 15;
   }
 
@@ -79,7 +80,17 @@ class GameManager {
         this.asteroids.splice(position, 1);
 
         //Add to the total score
-        this.score += 50;
+        switch (actor.getSize()) {
+          case this.AsteroidSize.LARGE:
+            this.score += this.AsteroidValue.LARGE;
+            break;
+          case this.AsteroidSize.MEDIUM:
+            this.score += this.AsteroidValue.MEDIUM;
+            break;
+          case this.AsteroidSize.SMALL:
+            this.score += this.AsteroidValue.SMALL;
+            break;
+        }
         console.log(this.score);
       }
     }
