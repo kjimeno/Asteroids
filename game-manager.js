@@ -80,7 +80,7 @@ class GameManager {
     let collideDist = actor.getSize() / 2 + this.ship.getSize() / 2;
 
     //If colliding with the ship
-    if (distBetween <= collideDist) {
+    if (distBetween <= collideDist && !this.ship.getInvincible()) {
       //Destroy this actor
       actor.setVisible(false);
       this.asteroids.splice(position, 1);

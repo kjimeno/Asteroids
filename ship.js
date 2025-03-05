@@ -11,6 +11,10 @@ class Ship extends Actor {
     this.teleportAnimSpeed = 0.8;
     this.fireShot = false;
     this.isAlive = true;
+    this.invincibleTimer = 0;
+    this.invincibleTime = 14;
+    this.invincibleAnimSpeed = 0.005;
+    this.invincible = true;
   }
 
   rotateCounterClockwise() {
@@ -55,6 +59,10 @@ class Ship extends Actor {
     return this.isAlive;
   }
 
+  getInvincible() {
+    return this.invincible;
+  }
+
   die() {
     this.isAlive = false;
   }
@@ -66,6 +74,15 @@ class Ship extends Actor {
 
     this.handleTeleportAnim();
     this.wrapWithinScreen();
+
+    //If invincible and the invincible animation  is still active, keep updating the timer
+    if (this.invincibleTimer < this.invincibleTime && this.invincible) {
+      this.invincibleTimer += deltaTime * this.invincibleAnimSpeed;
+
+      this.visible = int(this.invincibleTimer % 2) == 0 ? true : false;
+    } else {
+      this.invincible = false;
+    }
   }
 
   handleTeleportAnim() {
@@ -98,23 +115,25 @@ class Ship extends Actor {
   }
 
   display() {
-    push();
+    if (this.visible) {
+      push();
 
-    stroke(255);
-    fill(0);
+      stroke(255);
+      fill(0);
 
-    translate(this.position);
-    rotate(this.rotation);
+      translate(this.position);
+      rotate(this.rotation);
 
-    triangle(
-      -this.size / 2,
-      this.size / 2,
-      -this.size / 2,
-      -this.size / 2,
-      this.size / 2,
-      0
-    );
+      triangle(
+        -this.size / 2,
+        this.size / 2,
+        -this.size / 2,
+        -this.size / 2,
+        this.size / 2,
+        0
+      );
 
-    pop();
+      pop();
+    }
   }
 }
