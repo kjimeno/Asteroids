@@ -55,6 +55,8 @@ class GameManager {
   }
 
   handleCollision(actor, position) {
+    let spawnSmallerAsteroids = false;
+
     //Check collision if actor is hitting the bullets
     for (let j = 0; j < this.shipBullets.length; j++) {
       let distBetween = actor
@@ -70,25 +72,7 @@ class GameManager {
         this.shipBullets[j].setVisible(false);
         this.shipBullets.splice(j, 1);
 
-        //Spawn two smaller asteroids if it is not the smallest size
-        if (actor.getSize() != this.AsteroidSize.SMALL) {
-          let pos1 = createVector(
-            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
-            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
-          ).add(actor.getPosition());
-          let pos2 = createVector(
-            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
-            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
-          ).add(actor.getPosition());
-
-          let size =
-            actor.getSize() == this.AsteroidSize.LARGE
-              ? this.AsteroidSize.MEDIUM
-              : this.AsteroidSize.SMALL;
-
-          this.spawnAsteroid(pos1, size);
-          this.spawnAsteroid(pos2, size);
-        }
+        spawnSmallerAsteroids = true;
 
         //Destroy this actor
         actor.setVisible(false);
@@ -122,6 +106,28 @@ class GameManager {
         this.ship.setVisible(false);
         this.ship.die();
       }
+
+      spawnSmallerAsteroids = true;
+    }
+
+    //Spawn two smaller asteroids if asteroid was hit and not the smallest size
+    if (actor.getSize() != this.AsteroidSize.SMALL && spawnSmallerAsteroids) {
+      let pos1 = createVector(
+        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
+        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
+      ).add(actor.getPosition());
+      let pos2 = createVector(
+        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
+        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
+      ).add(actor.getPosition());
+
+      let size =
+        actor.getSize() == this.AsteroidSize.LARGE
+          ? this.AsteroidSize.MEDIUM
+          : this.AsteroidSize.SMALL;
+
+      this.spawnAsteroid(pos1, size);
+      this.spawnAsteroid(pos2, size);
     }
   }
 
