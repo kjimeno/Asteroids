@@ -8,11 +8,16 @@ class GameManager {
     this.ship;
     this.spaceDown = false;
     this.shipBullets = [];
+    this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
+    this.asteroidOffsetSpawn = 15;
   }
 
   startGame() {
     this.spawnShip();
-    this.spawnAsteroids();
+    for (let i = 0; i < this.initNumAsteroids; i++) {
+      let position = createVector(random(windowWidth), random(windowHeight));
+      this.spawnAsteroid(position, this.AsteroidSize.LARGE);
+    }
     this.score = 0;
     this.numLives = 3;
   }
@@ -64,6 +69,26 @@ class GameManager {
         //Destroy ship
         this.shipBullets[j].setVisible(false);
         this.shipBullets.splice(j, 1);
+
+        //Spawn two smaller asteroids if it is not the smallest size
+        if (actor.getSize() != this.AsteroidSize.SMALL) {
+          let pos1 = createVector(
+            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
+            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
+          ).add(actor.getPosition());
+          let pos2 = createVector(
+            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
+            -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
+          ).add(actor.getPosition());
+
+          let size =
+            actor.getSize() == this.AsteroidSize.LARGE
+              ? this.AsteroidSize.MEDIUM
+              : this.AsteroidSize.SMALL;
+
+          this.spawnAsteroid(pos1, size);
+          this.spawnAsteroid(pos2, size);
+        }
 
         //Destroy this actor
         actor.setVisible(false);
@@ -167,31 +192,27 @@ class GameManager {
     );
   }
 
-  spawnAsteroids() {
-    for (let i = 0; i < this.initNumAsteroids; i++) {
-      //Asteroid Properties:
-      const position = createVector(random(windowWidth), random(windowHeight));
-      const rotation = random(TWO_PI);
-      const speed = 0.5;
-      const numVertices = 20;
-      const shapeStrength = 0.12;
-      const largeSize = 80;
+  spawnAsteroid(position, size) {
+    //Asteroid Properties:
+    const rotation = random(TWO_PI);
+    const speed = 0.5;
+    const numVertices = 20;
+    const shapeStrength = 0.12;
 
-      //Create the Asteroid
-      let asteroid = new Asteroid(
-        position,
-        largeSize,
-        rotation,
-        speed,
-        numVertices,
-        shapeStrength
-      );
+    //Create the Asteroid
+    let asteroid = new Asteroid(
+      position,
+      size,
+      rotation,
+      speed,
+      numVertices,
+      shapeStrength
+    );
 
-      //Set Up Its Shape
-      asteroid.setupShape();
+    //Set Up Its Shape
+    asteroid.setupShape();
 
-      //Add to the Asteroids Array
-      this.asteroids.push(asteroid);
-    }
+    //Add to the Asteroids Array
+    this.asteroids.push(asteroid);
   }
 }
