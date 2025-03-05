@@ -18,7 +18,9 @@ class GameManager {
   }
 
   update() {
-    this.processInput();
+    if (this.ship.getAlive()) {
+      this.processInput();
+    }
 
     //Bullets
     for (let i = 0; i < this.shipBullets.length; i++) {
