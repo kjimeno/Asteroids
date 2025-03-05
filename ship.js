@@ -82,6 +82,7 @@ class Ship extends Actor {
       this.visible = int(this.invincibleTimer % 2) == 0 ? true : false;
     } else {
       this.invincible = false;
+      this.visible = true;
     }
   }
 
