@@ -2,7 +2,8 @@ class GameManager {
   constructor(initNumAsteroids, numSaucers) {
     this.initNumAsteroids = initNumAsteroids;
     this.numSaucers = numSaucers;
-    this.score = 0;
+    this.score;
+    this.numLives;
     this.asteroids = [];
     this.ship;
     this.spaceDown = false;
@@ -13,6 +14,7 @@ class GameManager {
     this.spawnShip();
     this.spawnAsteroids();
     this.score = 0;
+    this.numLives = 3;
   }
 
   update() {
@@ -84,6 +86,10 @@ class GameManager {
       //Destroy the ship
       this.ship.setVisible(false);
       this.ship.die();
+
+      //Reduce the number of lives
+      this.numLives--;
+      console.log(this.numLives);
     }
   }
 
