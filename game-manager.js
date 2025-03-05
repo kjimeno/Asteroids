@@ -90,6 +90,10 @@ class GameManager {
       //Reduce the number of lives
       this.numLives--;
       console.log(this.numLives);
+
+      if (this.numLives >= 1) {
+        this.spawnShip();
+      }
     }
   }
 
