@@ -10,6 +10,7 @@ class GameManager {
     this.shipBullets = [];
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
+    this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
     this.asteroidOffsetSpawn = 15;
     this.lastScoreMilestone = 0;
     this.gameIsOver = false;
@@ -19,7 +20,11 @@ class GameManager {
     this.spawnShip();
     for (let i = 0; i < this.initNumAsteroids; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
-      this.spawnAsteroid(position, this.AsteroidSize.LARGE);
+      this.spawnAsteroid(
+        position,
+        this.AsteroidSize.LARGE,
+        this.AsteroidSpeed.LARGE
+      );
     }
     this.score = 0;
     this.numLives = 3;
@@ -154,8 +159,14 @@ class GameManager {
           ? this.AsteroidSize.MEDIUM
           : this.AsteroidSize.SMALL;
 
-      this.spawnAsteroid(pos1, size);
-      this.spawnAsteroid(pos2, size);
+      let speed =
+        actor.getSize() == this.AsteroidSize.LARGE
+          ? this.AsteroidSpeed.MEDIUM
+          : this.AsteroidSpeed.SMALL;
+
+      console.log(speed);
+      this.spawnAsteroid(pos1, size, speed);
+      this.spawnAsteroid(pos2, size, speed);
     }
   }
 
@@ -228,10 +239,9 @@ class GameManager {
     );
   }
 
-  spawnAsteroid(position, size) {
+  spawnAsteroid(position, size, speed) {
     //Asteroid Properties:
     const rotation = random(TWO_PI);
-    const speed = 0.5;
     const numVertices = 20;
     const shapeStrength = 0.12;
 
