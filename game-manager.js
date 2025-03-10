@@ -223,8 +223,8 @@ class GameManager {
     //Ship Properties:
     const size = 20;
     const rotationSpeed = 0.1;
-    const thrustPower = 0.15;
-    const dragForce = 0.98;
+    const thrustPower = 0.3;
+    const dragForce = 0.97;
     const position = createVector(width / 2, height / 2);
     const rotation = -PI / 2;
 
