@@ -32,7 +32,6 @@ class Saucer extends Actor {
   }
 
   update() {
-    //if (this.size === this.Sizes.LARGE) {
     this.position.x += this.moveSpeedX;
 
     let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
@@ -44,7 +43,6 @@ class Saucer extends Actor {
       this.readyToShoot = true;
       this.shootTimer = 0;
     }
-    //}
 
     this.wrapWithinScreen();
   }
