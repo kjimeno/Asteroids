@@ -10,12 +10,17 @@ class Ship extends Actor {
     this.teleportShrinking = false;
     this.teleportAnimSpeed = 0.8;
     this.fireShot = false;
-    this.isAlive = true;
     this.invincibleTimer = 0;
     this.invincibleTime = 14;
     this.invincibleAnimSpeed = 0.005;
     this.invincible = true;
     this.isMovingForward = false;
+  }
+
+  respawn() {
+    this.invincible = true;
+    this.invincibleTimer = 0;
+    this.position = createVector(windowWidth / 2, windowHeight / 2);
   }
 
   rotateCounterClockwise() {
@@ -61,16 +66,8 @@ class Ship extends Actor {
     return this.rotation;
   }
 
-  getAlive() {
-    return this.isAlive;
-  }
-
   getInvincible() {
     return this.invincible;
-  }
-
-  die() {
-    this.isAlive = false;
   }
 
   update() {

@@ -57,10 +57,6 @@ class GameManager {
       return;
     }
 
-    if (this.ship.getAlive()) {
-      this.processInput();
-    }
-
     //Ship Bullets
     for (let i = 0; i < this.shipBullets.length; i++) {
       this.shipBullets[i].update();
@@ -84,7 +80,8 @@ class GameManager {
     }
 
     //Ship
-    if (this.ship.getAlive()) {
+    if (this.ship) {
+      this.processInput();
       this.ship.update();
       this.ship.display();
     }
@@ -184,14 +181,11 @@ class GameManager {
 
       //Respawn the ship if they still have a life
       if (this.numLives >= 1) {
-        this.spawnShip();
+        //this.spawnShip();           /--------------------------------------------------
+        this.ship.respawn();
         this.Sound.DEATH.stop();
         this.Sound.DEATH.play();
       } else {
-        //Destroy the ship
-        this.ship.setVisible(false);
-        this.ship.die();
-
         this.gameIsOver = true;
         this.music.stop();
         this.Sound.GAMEOVER.play();
