@@ -30,8 +30,10 @@ class Saucer extends Actor {
   update() {
     this.position.x += this.moveSpeedX;
 
-    let deltaY = sin(this.position.x * this.moveSpeedY) * this.maxYOffset;
+    let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
     this.position.y = this.initialPos.y + deltaY;
+
+    this.wrapWithinScreen();
   }
 
   display() {

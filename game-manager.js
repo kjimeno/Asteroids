@@ -13,7 +13,10 @@ class GameManager {
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
     this.asteroidOffsetSpawn = 15;
-    this.lastScoreMilestone = 0;
+    this.lastScoreAddLife = 0;
+    this.lastScoreSpawnSaucer = 0;
+    this.ADD_LIFE_MILESTONE = 10000;
+    this.SPAWN_SAUCER_MILESTONE = 1500;
     this.gameIsOver = false;
     this.music = createAudio("assets/sfx/music.mp3");
     this.Sound = {
@@ -132,9 +135,18 @@ class GameManager {
         }
 
         //Gain an extra life for every 10,000 points scored
-        if (this.score - this.lastScoreMilestone >= 10000) {
-          this.lastScoreMilestone += 10000;
+        if (this.score - this.lastScoreAddLife >= this.ADD_LIFE_MILESTONE) {
+          this.lastScoreAddLife += this.ADD_LIFE_MILESTONE;
           this.numLives++;
+        }
+
+        //Spawn a saucer for every 1,000 points scored
+        if (
+          this.score - this.lastScoreSpawnSaucer >=
+          this.SPAWN_SAUCER_MILESTONE
+        ) {
+          this.lastScoreSpawnSaucer += this.SPAWN_SAUCER_MILESTONE;
+          this.spawnSaucer();
         }
       }
     }
@@ -275,8 +287,8 @@ class GameManager {
   spawnSaucer() {
     //Random Y position from 20% to 80% of the screen height
     let randomY = random(windowHeight * 0.2, windowHeight * 0.8);
-    let pos = createVector(0, randomY);
     let size = 20;
+    let pos = createVector(-size / 2, randomY);
     let moveSpeed = 1;
 
     this.saucer = new Saucer(pos, size, moveSpeed);
