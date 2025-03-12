@@ -16,8 +16,6 @@ class Saucer extends Actor {
   }
 
   setupShape() {
-    print("SETTING UP");
-
     //Lower Shell
     this.vertices.push(createVector(-this.size, this.size / 4));
     this.vertices.push(createVector(this.size, this.size / 4));

@@ -76,6 +76,11 @@ class GameManager {
     for (let i = 0; i < this.saucerBullets.length; i++) {
       this.saucerBullets[i].update();
       this.saucerBullets[i].display();
+
+      //If the saucer bullet is destroyed, then remove it from the array
+      if (!this.saucerBullets[i].getVisibility()) {
+        this.saucerBullets.splice(i, 1);
+      }
     }
 
     //Ship
@@ -216,7 +221,6 @@ class GameManager {
           ? this.AsteroidSpeed.MEDIUM
           : this.AsteroidSpeed.SMALL;
 
-      console.log(speed);
       this.spawnAsteroid(pos1, size, speed);
       this.spawnAsteroid(pos2, size, speed);
     }
