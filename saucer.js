@@ -32,19 +32,19 @@ class Saucer extends Actor {
   }
 
   update() {
-    if (this.size === this.Sizes.LARGE) {
-      this.position.x += this.moveSpeedX;
+    //if (this.size === this.Sizes.LARGE) {
+    this.position.x += this.moveSpeedX;
 
-      let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
-      this.position.y = this.initialPos.y + deltaY;
+    let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
+    this.position.y = this.initialPos.y + deltaY;
 
-      //Update the fire rate timer
-      this.shootTimer += deltaTime;
-      if (this.shootTimer >= 1000) {
-        this.readyToShoot = true;
-        this.shootTimer = 0;
-      }
+    //Update the fire rate timer
+    this.shootTimer += deltaTime;
+    if (this.shootTimer >= 1000) {
+      this.readyToShoot = true;
+      this.shootTimer = 0;
     }
+    //}
 
     this.wrapWithinScreen();
   }

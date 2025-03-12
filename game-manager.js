@@ -6,7 +6,7 @@ class GameManager {
     this.numLives;
     this.asteroids = [];
     this.ship;
-    this.saucer;
+    this.saucers = [];
     this.spaceDown = false;
     this.shipBullets = [];
     this.saucerBullets = [];
@@ -16,9 +16,11 @@ class GameManager {
     this.SaucerSize = { SMALL: 15, LARGE: 35 };
     this.asteroidOffsetSpawn = 15;
     this.lastScoreAddLife = 0;
-    this.lastScoreSpawnSaucer = 0;
+    this.lastScoreBigSaucer = 0;
+    this.lastScoreSmallSaucer = 0;
     this.ADD_LIFE_MILESTONE = 10000;
-    this.SPAWN_SAUCER_MILESTONE = 1500;
+    this.SPAWN_BIG_SAUCER_MILESTONE = 800;
+    this.SPAWN_SMALL_SAUCER_MILESTONE = 2500;
     this.gameIsOver = false;
     this.music = createAudio("assets/sfx/music.mp3");
     this.Sound = {
@@ -47,12 +49,13 @@ class GameManager {
         this.AsteroidSpeed.LARGE
       );
     }
-    this.score = 1400;
+    this.score = 0;
     this.numLives = 3;
     this.gameIsOver = false;
   }
 
   update() {
+    print(this.saucers.length);
     if (this.gameIsOver) {
       this.displayGameOverScreen();
       return;
@@ -96,14 +99,14 @@ class GameManager {
       this.handleCollision(this.asteroids[i], i);
     }
 
-    //Saucer
-    if (this.saucer) {
-      this.saucer.update();
-      this.saucer.display();
+    //Saucers
+    for (let i = 0; i < this.saucers.length; i++) {
+      this.saucers[i].update();
+      this.saucers[i].display();
 
-      if (this.saucer.getReadyToShoot()) {
-        this.saucer.shoot();
-        this.saucerBullets.push(this.saucer.getBulletType());
+      if (this.saucers[i].getReadyToShoot()) {
+        this.saucers[i].shoot();
+        this.saucerBullets.push(this.saucers[i].getBulletType());
       }
     }
 
@@ -156,13 +159,20 @@ class GameManager {
           this.numLives++;
         }
 
-        //Spawn a saucer for every 1,000 points scored
+        //Spawn a big saucer for every 800 points scored
+        //Spawn a small saucer for every 2500 points scored
         if (
-          this.score - this.lastScoreSpawnSaucer >=
-          this.SPAWN_SAUCER_MILESTONE
+          this.score - this.lastScoreSmallSaucer >=
+          this.SPAWN_SMALL_SAUCER_MILESTONE
         ) {
-          this.lastScoreSpawnSaucer += this.SPAWN_SAUCER_MILESTONE;
-          this.spawnSaucer();
+          this.lastScoreSmallSaucer += this.SPAWN_SMALL_SAUCER_MILESTONE;
+          this.spawnSaucer(this.SaucerSize.SMALL);
+        } else if (
+          this.score - this.lastScoreBigSaucer >=
+          this.SPAWN_BIG_SAUCER_MILESTONE
+        ) {
+          this.lastScoreBigSaucer += this.SPAWN_BIG_SAUCER_MILESTONE;
+          this.spawnSaucer(this.SaucerSize.LARGE);
         }
       }
     }
@@ -292,17 +302,19 @@ class GameManager {
     );
   }
 
-  spawnSaucer() {
+  spawnSaucer(size) {
     //Random Y position from 20% to 80% of the screen height
     let randomY = random(windowHeight * 0.2, windowHeight * 0.8);
-    let size = this.SaucerSize.LARGE;
     let pos = createVector(-size / 2, randomY);
     let moveSpeed = 1;
 
-    this.saucer = new Saucer(pos, size, moveSpeed, this.ship);
+    let saucer = new Saucer(pos, size, moveSpeed, this.ship);
 
     //Set Up Its Shape
-    this.saucer.setupShape();
+    saucer.setupShape();
+
+    //Add to the array of saucers
+    this.saucers.push(saucer);
   }
 
   spawnAsteroid(position, size, speed) {
