@@ -33,7 +33,6 @@ class GameManager {
     this.music.loop();
 
     this.spawnShip();
-    this.spawnSaucer();
 
     for (let i = 0; i < this.initNumAsteroids; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
@@ -84,8 +83,10 @@ class GameManager {
       this.handleCollision(this.asteroids[i], i);
     }
 
-    this.saucer.update();
-    this.saucer.display();
+    if (this.saucer) {
+      this.saucer.update();
+      this.saucer.display();
+    }
 
     //HUD
     this.displayHUD();
