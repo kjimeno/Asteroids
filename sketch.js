@@ -10,7 +10,7 @@ function setup() {
   textAlign(CENTER);
   textFont(font);
 
-  gameManager = new GameManager(4, 0);
+  gameManager = new GameManager(0);
   gameManager.startGame();
 }
 

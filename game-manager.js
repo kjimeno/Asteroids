@@ -1,8 +1,8 @@
 class GameManager {
-  constructor(initNumAsteroids, numSaucers) {
-    this.initNumAsteroids = initNumAsteroids;
+  constructor(numSaucers) {
     this.numSaucers = numSaucers;
     this.score;
+    this.level;
     this.numLives;
     this.asteroids = [];
     this.ship;
@@ -39,9 +39,15 @@ class GameManager {
     //Loop the music
     this.music.loop();
 
+    //Game properties set to beginning properties
+    this.score = 0;
+    this.level = 1;
+    this.numLives = 3;
+    this.gameIsOver = false;
+
     this.spawnShip();
 
-    for (let i = 0; i < this.initNumAsteroids; i++) {
+    for (let i = 0; i < this.level; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
       this.spawnAsteroid(
         position,
@@ -49,13 +55,9 @@ class GameManager {
         this.AsteroidSpeed.LARGE
       );
     }
-    this.score = 0;
-    this.numLives = 3;
-    this.gameIsOver = false;
   }
 
   update() {
-    print(this.saucers.length);
     if (this.gameIsOver) {
       this.displayGameOverScreen();
       return;
@@ -116,6 +118,7 @@ class GameManager {
 
   handleCollision(actor, position) {
     let spawnSmallerAsteroids = false;
+    let noMoreAsteroids = false;
 
     //Check collision if actor is hitting the bullets
     for (let j = 0; j < this.shipBullets.length; j++) {
@@ -139,6 +142,14 @@ class GameManager {
         this.asteroids.splice(position, 1);
         this.Sound.EXPLODE.stop();
         this.Sound.EXPLODE.play();
+
+        //If the last asteroid just got destroyed
+        if (
+          actor.getSize() === this.AsteroidSize.SMALL &&
+          this.asteroids.length <= 0
+        ) {
+          noMoreAsteroids = true;
+        }
 
         //Add to the total score
         switch (actor.getSize()) {
@@ -202,6 +213,14 @@ class GameManager {
         this.Sound.GAMEOVER.play();
       }
 
+      //If the last asteroid just got destroyed
+      if (
+        actor.getSize() === this.AsteroidSize.SMALL &&
+        this.asteroids.length <= 0
+      ) {
+        noMoreAsteroids = true;
+      }
+
       spawnSmallerAsteroids = true;
     }
 
@@ -229,6 +248,21 @@ class GameManager {
       this.spawnAsteroid(pos1, size, speed);
       this.spawnAsteroid(pos2, size, speed);
     }
+
+    //Spawn asteroids if there are no more asteroids and go to next level
+
+    if (noMoreAsteroids) {
+      this.level++;
+      for (let i = 0; i < this.level; i++) {
+        let position = createVector(random(windowWidth), random(windowHeight));
+        this.spawnAsteroid(
+          position,
+          this.AsteroidSize.LARGE,
+          this.AsteroidSpeed.LARGE
+        );
+      }
+    }
+    console.log(noMoreAsteroids);
   }
 
   processInput() {
@@ -346,7 +380,14 @@ class GameManager {
 
     fill(255);
     textSize(20);
-    text("SCORE: " + this.score, windowWidth / 2, offsetFromEdge);
+
+    //Score Text (Displayed at the top-left)
+    text("SCORE: " + this.score, windowWidth * 0.1, offsetFromEdge);
+
+    //Level Text (Displayed at the top-right)
+    text("LEVEL: " + this.level, windowWidth * 0.9, offsetFromEdge);
+
+    //Number of Lives Text
     text(
       "NUMBER OF LIVES: " + this.numLives,
       windowWidth / 2,
