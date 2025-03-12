@@ -9,6 +9,7 @@ class GameManager {
     this.saucer;
     this.spaceDown = false;
     this.shipBullets = [];
+    this.saucerBullets = [];
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
@@ -45,7 +46,7 @@ class GameManager {
         this.AsteroidSpeed.LARGE
       );
     }
-    this.score = 0;
+    this.score = 1400;
     this.numLives = 3;
     this.gameIsOver = false;
   }
@@ -60,7 +61,7 @@ class GameManager {
       this.processInput();
     }
 
-    //Bullets
+    //Ship Bullets
     for (let i = 0; i < this.shipBullets.length; i++) {
       this.shipBullets[i].update();
       this.shipBullets[i].display();
@@ -69,6 +70,12 @@ class GameManager {
       if (!this.shipBullets[i].getVisibility()) {
         this.shipBullets.splice(i, 1);
       }
+    }
+
+    //Saucer Bullets
+    for (let i = 0; i < this.saucerBullets.length; i++) {
+      this.saucerBullets[i].update();
+      this.saucerBullets[i].display();
     }
 
     //Ship
@@ -86,9 +93,15 @@ class GameManager {
       this.handleCollision(this.asteroids[i], i);
     }
 
+    //Saucer
     if (this.saucer) {
       this.saucer.update();
       this.saucer.display();
+
+      if (this.saucer.getReadyToShoot()) {
+        this.saucer.shoot();
+        this.saucerBullets.push(this.saucer.getBulletType());
+      }
     }
 
     //HUD
@@ -240,8 +253,7 @@ class GameManager {
     if (keyIsDown(32) && !this.ship.getTeleportActive() && !this.spaceDown) {
       this.spaceDown = true;
 
-      let isFriendly = true;
-      this.spawnBullet(isFriendly);
+      this.spawnBullet();
       this.Sound.SHOOT.stop();
       this.Sound.SHOOT.play();
     } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
@@ -249,19 +261,16 @@ class GameManager {
     }
   }
 
-  spawnBullet(friendly) {
-    if (friendly) {
-      //Bullet Properties:
-      const size = 3;
-      const speed = 13;
-      const position = this.ship.getBulletPosition();
-      const rotation = this.ship.getRotation();
+  spawnBullet() {
+    //Bullet Properties:
+    const size = 3;
+    const speed = 13;
+    const position = this.ship.getBulletPosition();
+    const rotation = this.ship.getRotation();
+    const lifeTime = 1000;
 
-      let bullet = new Bullet(position, size, rotation, speed);
-      this.shipBullets.push(bullet);
-    } else {
-      //Enemy Bullet Properties:
-    }
+    let bullet = new Bullet(position, size, rotation, speed, lifeTime);
+    this.shipBullets.push(bullet);
   }
 
   spawnShip() {
@@ -291,7 +300,7 @@ class GameManager {
     let pos = createVector(-size / 2, randomY);
     let moveSpeed = 1;
 
-    this.saucer = new Saucer(pos, size, moveSpeed);
+    this.saucer = new Saucer(pos, size, moveSpeed, this.ship);
 
     //Set Up Its Shape
     this.saucer.setupShape();

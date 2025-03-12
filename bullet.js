@@ -1,7 +1,7 @@
 class Bullet extends Actor {
-  constructor(position, size, rotation, speed) {
+  constructor(position, size, rotation, speed, lifeTime) {
     super(position, size, rotation, speed);
-    this.lifeTime = 1000;
+    this.lifeTime = lifeTime;
     this.lifeTimer = 0;
   }
 
