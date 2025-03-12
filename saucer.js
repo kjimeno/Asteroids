@@ -13,6 +13,8 @@ class Saucer extends Actor {
     this.readyToShoot = false;
     this.shootFireRate = 1000;
     this.shootTimer = 0;
+    this.Sizes = { SMALL: 15, LARGE: 35 };
+    this.MAX_AIM_OFFSET = 2;
   }
 
   setupShape() {
@@ -30,16 +32,18 @@ class Saucer extends Actor {
   }
 
   update() {
-    this.position.x += this.moveSpeedX;
+    if (this.size === this.Sizes.LARGE) {
+      this.position.x += this.moveSpeedX;
 
-    let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
-    this.position.y = this.initialPos.y + deltaY;
+      let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
+      this.position.y = this.initialPos.y + deltaY;
 
-    //Update the fire rate timer
-    this.shootTimer += deltaTime;
-    if (this.shootTimer >= 1000) {
-      this.readyToShoot = true;
-      this.shootTimer = 0;
+      //Update the fire rate timer
+      this.shootTimer += deltaTime;
+      if (this.shootTimer >= 1000) {
+        this.readyToShoot = true;
+        this.shootTimer = 0;
+      }
     }
 
     this.wrapWithinScreen();
@@ -78,14 +82,20 @@ class Saucer extends Actor {
     const position = createVector(this.position.x, this.position.y);
     const lifeTime = 3000;
 
-    //Rotation as a vector
+    //Rotation to player as a vector
     let rotation = createVector(
       this.target.getPosition().x,
       this.target.getPosition().y
     ).sub(this.position);
 
-    //Rotation as an angle
+    //Rotation to player as an angle
     rotation = atan2(rotation.y, rotation.x);
+
+    //Angle with bad aim (large saucers)
+    if (this.size === this.Sizes.LARGE) {
+      let aimRange = random(-this.MAX_AIM_OFFSET, this.MAX_AIM_OFFSET);
+      rotation += aimRange;
+    }
 
     return new Bullet(position, size, rotation, speed, lifeTime);
   }
