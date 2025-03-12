@@ -13,6 +13,7 @@ class GameManager {
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
     this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
     this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
+    this.SaucerSize = { SMALL: 15, LARGE: 35 };
     this.asteroidOffsetSpawn = 15;
     this.lastScoreAddLife = 0;
     this.lastScoreSpawnSaucer = 0;
@@ -294,7 +295,7 @@ class GameManager {
   spawnSaucer() {
     //Random Y position from 20% to 80% of the screen height
     let randomY = random(windowHeight * 0.2, windowHeight * 0.8);
-    let size = 20;
+    let size = this.SaucerSize.LARGE;
     let pos = createVector(-size / 2, randomY);
     let moveSpeed = 1;
 
