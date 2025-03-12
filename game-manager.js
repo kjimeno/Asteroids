@@ -11,7 +11,7 @@ class GameManager {
     this.shipBullets = [];
     this.saucerBullets = [];
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
-    this.AsteroidValue = { SMALL: 100, MEDIUM: 50, LARGE: 20 };
+    this.AsteroidValue = { SMALL: 80, MEDIUM: 50, LARGE: 20 };
     this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
     this.SaucerSize = { SMALL: 15, LARGE: 35 };
     this.asteroidOffsetSpawn = 15;
