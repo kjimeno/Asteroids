@@ -14,9 +14,23 @@ class GameManager {
     this.asteroidOffsetSpawn = 15;
     this.lastScoreMilestone = 0;
     this.gameIsOver = false;
+    this.music = createAudio("assets/sfx/music.mp3");
+    this.Sound = {
+      DEATH: createAudio("assets/sfx/death.mp3"),
+      EXPLODE: createAudio("assets/sfx/explode.mp3"),
+      GAMEOVER: createAudio("assets/sfx/game-over.mp3"),
+      GAMESTART: createAudio("assets/sfx/game-start.mp3"),
+      SHOOT: createAudio("assets/sfx/shoot.mp3"),
+      TELEPORT: createAudio("assets/sfx/teleport.mp3"),
+      THRUST: createAudio("assets/sfx/thrust.mp3"),
+      SAUCER_APPEAR: createAudio("assets/sfx/saucer-appear.mp3"),
+    };
   }
 
   startGame() {
+    //Loop the music
+    this.music.loop();
+
     this.spawnShip();
     for (let i = 0; i < this.initNumAsteroids; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
@@ -85,7 +99,7 @@ class GameManager {
 
       //If colliding with the ship's bullets
       if (distBetween <= collideDistance) {
-        //Destroy ship
+        //Destroy ship bullets
         this.shipBullets[j].setVisible(false);
         this.shipBullets.splice(j, 1);
 
@@ -94,6 +108,8 @@ class GameManager {
         //Destroy this actor
         actor.setVisible(false);
         this.asteroids.splice(position, 1);
+        this.Sound.EXPLODE.stop();
+        this.Sound.EXPLODE.play();
 
         //Add to the total score
         switch (actor.getSize()) {
@@ -132,12 +148,16 @@ class GameManager {
       //Respawn the ship if they still have a life
       if (this.numLives >= 1) {
         this.spawnShip();
+        this.Sound.DEATH.stop();
+        this.Sound.DEATH.play();
       } else {
         //Destroy the ship
         this.ship.setVisible(false);
         this.ship.die();
 
         this.gameIsOver = true;
+        this.music.stop();
+        this.Sound.GAMEOVER.play();
       }
 
       spawnSmallerAsteroids = true;
@@ -184,13 +204,17 @@ class GameManager {
     //'W' is pressed
     if (keyIsDown(87) || keyIsDown(38)) {
       this.ship.thrustForward();
+      this.Sound.THRUST.play();
     } else {
       this.ship.setIsMovingForward(false);
+      this.Sound.THRUST.stop();
     }
 
     //'S' is pressed
     if ((keyIsDown(83) || keyIsDown(40)) && !this.ship.getTeleportActive()) {
       this.ship.teleport();
+      this.Sound.TELEPORT.stop();
+      this.Sound.TELEPORT.play();
     }
 
     //Space Bar is pressed
@@ -199,6 +223,8 @@ class GameManager {
 
       let isFriendly = true;
       this.spawnBullet(isFriendly);
+      this.Sound.SHOOT.stop();
+      this.Sound.SHOOT.play();
     } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
       this.spaceDown = false;
     }
@@ -289,5 +315,6 @@ class GameManager {
       windowWidth / 2,
       windowHeight / 2 + scoreTextOffset
     );
+    this.Sound.THRUST.stop();
   }
 }
