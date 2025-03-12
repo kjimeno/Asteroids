@@ -6,6 +6,7 @@ class GameManager {
     this.numLives;
     this.asteroids = [];
     this.ship;
+    this.saucer;
     this.spaceDown = false;
     this.shipBullets = [];
     this.AsteroidSize = { SMALL: 20, MEDIUM: 50, LARGE: 80 };
@@ -32,6 +33,8 @@ class GameManager {
     this.music.loop();
 
     this.spawnShip();
+    this.spawnSaucer();
+
     for (let i = 0; i < this.initNumAsteroids; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
       this.spawnAsteroid(
@@ -80,6 +83,9 @@ class GameManager {
       //Destroys asteroid if hit
       this.handleCollision(this.asteroids[i], i);
     }
+
+    this.saucer.update();
+    this.saucer.display();
 
     //HUD
     this.displayHUD();
@@ -263,6 +269,19 @@ class GameManager {
       thrustPower,
       dragForce
     );
+  }
+
+  spawnSaucer() {
+    //Random Y position from 20% to 80% of the screen height
+    let randomY = random(windowHeight * 0.2, windowHeight * 0.8);
+    let pos = createVector(0, randomY);
+    let size = 20;
+    let moveSpeed = 1;
+
+    this.saucer = new Saucer(pos, size, moveSpeed);
+
+    //Set Up Its Shape
+    this.saucer.setupShape();
   }
 
   spawnAsteroid(position, size, speed) {
