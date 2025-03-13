@@ -16,6 +16,7 @@ class Saucer extends Actor {
     this.Sizes = { SMALL: 15, LARGE: 35 };
     this.MAX_AIM_OFFSET = 2;
     this.SMALL_INSANE_AIM_SCORE = 4400;
+    this.FORECAST_AIM = 30;
   }
 
   setupShape() {
@@ -74,7 +75,7 @@ class Saucer extends Actor {
     pop();
   }
 
-  getBulletType(playerScore, SMALL_MILESTONE) {
+  getBulletType(playerScore, SMALL_MILESTONE, ship) {
     //Bullet Properties:
     const size = 3;
     const speed = 7;
@@ -83,13 +84,7 @@ class Saucer extends Actor {
     const color = "yellow";
 
     //Rotation to player as a vector
-    let rotation = createVector(
-      this.target.getPosition().x,
-      this.target.getPosition().y
-    ).sub(this.position);
-
-    //Rotation to player as an angle
-    rotation = atan2(rotation.y, rotation.x);
+    let rotation = this.toRotation(ship.getPosition());
 
     //Angle with bad aim (large saucers)
     if (this.size === this.Sizes.LARGE) {
@@ -103,9 +98,26 @@ class Saucer extends Actor {
         max(0, this.MAX_AIM_OFFSET - playerScore / SMALL_MILESTONE)
       );
       rotation += aimRange;
+
+      //If the player's score is high enough, the small saucer's aim will consider their velocity
+      if (playerScore >= this.SMALL_INSANE_AIM_SCORE) {
+        //Ship's position and velocity
+        let shipPos = createVector(ship.getPosition().x, ship.getPosition().y);
+        let shipVel = createVector(ship.getVelocity().x, ship.getVelocity().y);
+
+        let newTarget = shipPos.add(shipVel.mult(this.FORECAST_AIM));
+        rotation = this.toRotation(newTarget);
+      }
     }
 
     return new Bullet(position, size, rotation, speed, lifeTime, color);
+  }
+
+  toRotation(targetPos) {
+    let rotation = createVector(targetPos.x, targetPos.y).sub(this.position);
+
+    rotation = atan2(rotation.y, rotation.x);
+    return rotation;
   }
 
   getReadyToShoot() {

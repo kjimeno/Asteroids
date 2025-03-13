@@ -50,6 +50,10 @@ class Ship extends Actor {
     return this.teleportActive;
   }
 
+  getVelocity() {
+    return this.velocity;
+  }
+
   setIsMovingForward(isTrue) {
     this.isMovingForward = isTrue;
   }

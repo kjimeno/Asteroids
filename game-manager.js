@@ -112,7 +112,8 @@ class GameManager {
         this.saucerBullets.push(
           this.saucers[i].getBulletType(
             this.score,
-            this.SPAWN_SMALL_SAUCER_MILESTONE
+            this.SPAWN_SMALL_SAUCER_MILESTONE,
+            this.ship
           )
         );
       }
