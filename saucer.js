@@ -73,7 +73,7 @@ class Saucer extends Actor {
     pop();
   }
 
-  getBulletType() {
+  getBulletType(playerScore, SMALL_MILESTONE) {
     //Bullet Properties:
     const size = 3;
     const speed = 7;
@@ -92,6 +92,14 @@ class Saucer extends Actor {
     //Angle with bad aim (large saucers)
     if (this.size === this.Sizes.LARGE) {
       let aimRange = random(-this.MAX_AIM_OFFSET, this.MAX_AIM_OFFSET);
+      rotation += aimRange;
+    }
+    //Angle improves as player's score increases (small saucers)
+    else {
+      let aimRange = random(
+        min(-this.MAX_AIM_OFFSET + playerScore / SMALL_MILESTONE, 0),
+        max(0, this.MAX_AIM_OFFSET - playerScore / SMALL_MILESTONE)
+      );
       rotation += aimRange;
     }
 

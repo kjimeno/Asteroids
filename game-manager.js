@@ -109,7 +109,12 @@ class GameManager {
 
       if (this.saucers[i].getReadyToShoot()) {
         this.saucers[i].shoot();
-        this.saucerBullets.push(this.saucers[i].getBulletType());
+        this.saucerBullets.push(
+          this.saucers[i].getBulletType(
+            this.score,
+            this.SPAWN_SMALL_SAUCER_MILESTONE
+          )
+        );
       }
     }
 
