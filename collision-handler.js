@@ -181,22 +181,10 @@ class CollisionHandler {
         this.destroyItemFromArray(thisActor, this.gameManager.shipBullets);
       }
 
-      //If this actor is a saucer
-      if (this.gameManager.saucers.includes(thisActor)) {
-        //Destroy the saucer
-        this.destroyItemFromArray(thisActor, this.gameManager.saucers);
-      }
-
       //If this actor is a saucer bullet
       if (this.gameManager.saucerBullets.includes(thisActor)) {
         //Destroy the saucer bullet
         this.destroyItemFromArray(thisActor, this.gameManager.saucerBullets);
-      }
-
-      //If this actor is a saucer
-      if (this.gameManager.saucers.includes(thisActor)) {
-        //Destroy the saucer
-        this.destroyItemFromArray(thisActor, this.gameManager.saucers);
       }
 
       //If this actor is the ship
@@ -225,6 +213,36 @@ class CollisionHandler {
         }
       }
 
+      //Spawn a big saucer for every 800 points scored
+      //Spawn a small saucer for every 2500 points scored
+      if (
+        this.gameManager.score - this.gameManager.lastScoreSmallSaucer >=
+        this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE
+      ) {
+        this.gameManager.lastScoreSmallSaucer +=
+          this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE;
+        this.gameManager.spawnSaucer(this.SaucerSize.SMALL);
+      } else if (
+        this.gameManager.score - this.gameManager.lastScoreBigSaucer >=
+        this.gameManager.SPAWN_BIG_SAUCER_MILESTONE
+      ) {
+        this.gameManager.lastScoreBigSaucer +=
+          this.gameManager.SPAWN_BIG_SAUCER_MILESTONE;
+        this.gameManager.spawnSaucer(this.SaucerSize.LARGE);
+      }
+
+      //If this actor is a saucer
+      if (this.gameManager.saucers.includes(thisActor)) {
+        //Destroy the saucer
+        this.destroyItemFromArray(thisActor, this.gameManager.saucers);
+
+        //Add to the total score------------------------------------------------------------
+        this.gameManager.score +=
+          thisActor.getSize() === this.gameManager.SaucerSize.LARGE
+            ? this.gameManager.SaucerValue.LARGE
+            : this.gameManager.SaucerValue.SMALL;
+      }
+
       //Gain an extra life for every 10,000 points scored
       if (
         this.gameManager.score - this.gameManager.lastScoreAddLife >=
@@ -234,24 +252,6 @@ class CollisionHandler {
           this.gameManager.ADD_LIFE_MILESTONE;
         this.gameManager.numLives++;
       }
-    }
-
-    //Spawn a big saucer for every 800 points scored
-    //Spawn a small saucer for every 2500 points scored
-    if (
-      this.gameManager.score - this.gameManager.lastScoreSmallSaucer >=
-      this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE
-    ) {
-      this.gameManager.lastScoreSmallSaucer +=
-        this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE;
-      this.gameManager.spawnSaucer(this.SaucerSize.SMALL);
-    } else if (
-      this.gameManager.score - this.gameManager.lastScoreBigSaucer >=
-      this.gameManager.SPAWN_BIG_SAUCER_MILESTONE
-    ) {
-      this.gameManager.lastScoreBigSaucer +=
-        this.gameManager.SPAWN_BIG_SAUCER_MILESTONE;
-      this.gameManager.spawnSaucer(this.SaucerSize.LARGE);
     }
   }
 

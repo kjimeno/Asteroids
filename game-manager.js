@@ -15,6 +15,7 @@ class GameManager {
     this.AsteroidValue = { SMALL: 80, MEDIUM: 50, LARGE: 20 };
     this.AsteroidSpeed = { SMALL: 1.5, MEDIUM: 1, LARGE: 0.5 };
     this.SaucerSize = { SMALL: 15, LARGE: 35 };
+    this.SaucerValue = { SMALL: 100, LARGE: 50 };
     this.asteroidOffsetSpawn = 15;
     this.lastScoreAddLife = 0;
     this.lastScoreBigSaucer = 0;
