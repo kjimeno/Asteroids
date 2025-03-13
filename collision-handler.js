@@ -80,7 +80,6 @@ class CollisionHandler {
     if (dist <= thisActor.getSize() / 2 + otherActor.getSize() / 2) {
       //HANDLING OTHER ACTOR -------------------------------------------------------------------------------------------------------------------------------
       //If other actor is an asteroid (BUT this actor is a ship bullet)
-
       let otherIsAsteroid = this.gameManager.asteroids.includes(otherActor);
       let thisIsBullet =
         this.gameManager.shipBullets.includes(thisActor) ||
@@ -92,6 +91,11 @@ class CollisionHandler {
       //Check if other actor is a saucer bullet
       if (this.gameManager.saucerBullets.includes(otherActor)) {
         this.destroyItemFromArray(otherActor, this.gameManager.saucerBullets);
+      }
+
+      //Check if other actor is a saucer
+      if (this.gameManager.saucers.includes(otherActor)) {
+        this.destroyItemFromArray(otherActor, this.gameManager.saucers);
       }
 
       //Check if other actor is a ship bullet
