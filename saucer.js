@@ -15,6 +15,7 @@ class Saucer extends Actor {
     this.shootTimer = 0;
     this.Sizes = { SMALL: 15, LARGE: 35 };
     this.MAX_AIM_OFFSET = 2;
+    this.SMALL_INSANE_AIM_SCORE = 4400;
   }
 
   setupShape() {
@@ -79,6 +80,7 @@ class Saucer extends Actor {
     const speed = 7;
     const position = createVector(this.position.x, this.position.y);
     const lifeTime = 3000;
+    const color = "yellow";
 
     //Rotation to player as a vector
     let rotation = createVector(
@@ -103,7 +105,7 @@ class Saucer extends Actor {
       rotation += aimRange;
     }
 
-    return new Bullet(position, size, rotation, speed, lifeTime);
+    return new Bullet(position, size, rotation, speed, lifeTime, color);
   }
 
   getReadyToShoot() {

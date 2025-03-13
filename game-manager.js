@@ -21,8 +21,8 @@ class GameManager {
     this.lastScoreBigSaucer = 0;
     this.lastScoreSmallSaucer = 0;
     this.ADD_LIFE_MILESTONE = 10000;
-    this.SPAWN_BIG_SAUCER_MILESTONE = 800;
-    this.SPAWN_SMALL_SAUCER_MILESTONE = 2500;
+    this.SPAWN_BIG_SAUCER_MILESTONE = 500;
+    this.SPAWN_SMALL_SAUCER_MILESTONE = 1500;
     this.gameIsOver = false;
     this.music = createAudio("assets/sfx/music.mp3");
     this.Sounds = {
@@ -171,8 +171,10 @@ class GameManager {
     const position = this.ship.getBulletPosition();
     const rotation = this.ship.getRotation();
     const lifeTime = 1000;
+    //White
+    const color = "white";
 
-    let bullet = new Bullet(position, size, rotation, speed, lifeTime);
+    let bullet = new Bullet(position, size, rotation, speed, lifeTime, color);
     this.shipBullets.push(bullet);
   }
 
