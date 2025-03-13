@@ -1,5 +1,6 @@
 class GameManager {
   constructor(numSaucers) {
+    this.collisionHandler;
     this.numSaucers = numSaucers;
     this.score;
     this.level;
@@ -23,7 +24,7 @@ class GameManager {
     this.SPAWN_SMALL_SAUCER_MILESTONE = 2500;
     this.gameIsOver = false;
     this.music = createAudio("assets/sfx/music.mp3");
-    this.Sound = {
+    this.Sounds = {
       DEATH: createAudio("assets/sfx/death.mp3"),
       EXPLODE: createAudio("assets/sfx/explode.mp3"),
       GAMEOVER: createAudio("assets/sfx/game-over.mp3"),
@@ -46,6 +47,8 @@ class GameManager {
     this.gameIsOver = false;
 
     this.spawnShip();
+
+    this.collisionHandler = new CollisionHandler(this);
 
     for (let i = 0; i < this.level; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
@@ -96,9 +99,6 @@ class GameManager {
     for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].update();
       this.asteroids[i].display();
-
-      //Destroys asteroid if hit
-      this.handleCollision(this.asteroids[i], i);
     }
 
     //Saucers
@@ -112,157 +112,11 @@ class GameManager {
       }
     }
 
+    //Handle collisions
+    this.collisionHandler.update();
+
     //HUD
     this.displayHUD();
-  }
-
-  handleCollision(actor, position) {
-    let spawnSmallerAsteroids = false;
-    let noMoreAsteroids = false;
-
-    //Check collision if actor is hitting the bullets
-    for (let j = 0; j < this.shipBullets.length; j++) {
-      let distBetween = actor
-        .getPosition()
-        .dist(this.shipBullets[j].getPosition());
-
-      let collideDistance =
-        actor.getSize() / 2 + this.shipBullets[j].getSize() / 2;
-
-      //If colliding with the ship's bullets
-      if (distBetween <= collideDistance) {
-        //Destroy ship bullets
-        this.shipBullets[j].setVisible(false);
-        this.shipBullets.splice(j, 1);
-
-        spawnSmallerAsteroids = true;
-
-        //Destroy this actor
-        actor.setVisible(false);
-        this.asteroids.splice(position, 1);
-        this.Sound.EXPLODE.stop();
-        this.Sound.EXPLODE.play();
-
-        //If the last asteroid just got destroyed
-        if (
-          actor.getSize() === this.AsteroidSize.SMALL &&
-          this.asteroids.length <= 0
-        ) {
-          noMoreAsteroids = true;
-        }
-
-        //Add to the total score
-        switch (actor.getSize()) {
-          case this.AsteroidSize.LARGE:
-            this.score += this.AsteroidValue.LARGE;
-            break;
-          case this.AsteroidSize.MEDIUM:
-            this.score += this.AsteroidValue.MEDIUM;
-            break;
-          case this.AsteroidSize.SMALL:
-            this.score += this.AsteroidValue.SMALL;
-            break;
-        }
-
-        //Gain an extra life for every 10,000 points scored
-        if (this.score - this.lastScoreAddLife >= this.ADD_LIFE_MILESTONE) {
-          this.lastScoreAddLife += this.ADD_LIFE_MILESTONE;
-          this.numLives++;
-        }
-
-        //Spawn a big saucer for every 800 points scored
-        //Spawn a small saucer for every 2500 points scored
-        if (
-          this.score - this.lastScoreSmallSaucer >=
-          this.SPAWN_SMALL_SAUCER_MILESTONE
-        ) {
-          this.lastScoreSmallSaucer += this.SPAWN_SMALL_SAUCER_MILESTONE;
-          this.spawnSaucer(this.SaucerSize.SMALL);
-        } else if (
-          this.score - this.lastScoreBigSaucer >=
-          this.SPAWN_BIG_SAUCER_MILESTONE
-        ) {
-          this.lastScoreBigSaucer += this.SPAWN_BIG_SAUCER_MILESTONE;
-          this.spawnSaucer(this.SaucerSize.LARGE);
-        }
-      }
-    }
-
-    //Check collision if actor is hitting the ship
-    let distBetween = actor.getPosition().dist(this.ship.getPosition());
-    let collideDist = actor.getSize() / 2 + this.ship.getSize() / 2;
-
-    //If colliding with the ship
-    if (distBetween <= collideDist && !this.ship.getInvincible()) {
-      //Destroy this actor
-      actor.setVisible(false);
-      this.asteroids.splice(position, 1);
-
-      //Reduce the number of lives
-      this.numLives--;
-
-      //Respawn the ship if they still have a life
-      if (this.numLives >= 1) {
-        //this.spawnShip();           /--------------------------------------------------
-        this.ship.respawn();
-        this.Sound.DEATH.stop();
-        this.Sound.DEATH.play();
-      } else {
-        this.gameIsOver = true;
-        this.music.stop();
-        this.Sound.GAMEOVER.play();
-      }
-
-      //If the last asteroid just got destroyed
-      if (
-        actor.getSize() === this.AsteroidSize.SMALL &&
-        this.asteroids.length <= 0
-      ) {
-        noMoreAsteroids = true;
-      }
-
-      spawnSmallerAsteroids = true;
-    }
-
-    //Spawn two smaller asteroids if asteroid was hit and not the smallest size
-    if (actor.getSize() != this.AsteroidSize.SMALL && spawnSmallerAsteroids) {
-      let pos1 = createVector(
-        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
-        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
-      ).add(actor.getPosition());
-      let pos2 = createVector(
-        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn),
-        -this.asteroidOffsetSpawn + 2 * random(this.asteroidOffsetSpawn)
-      ).add(actor.getPosition());
-
-      let size =
-        actor.getSize() == this.AsteroidSize.LARGE
-          ? this.AsteroidSize.MEDIUM
-          : this.AsteroidSize.SMALL;
-
-      let speed =
-        actor.getSize() == this.AsteroidSize.LARGE
-          ? this.AsteroidSpeed.MEDIUM
-          : this.AsteroidSpeed.SMALL;
-
-      this.spawnAsteroid(pos1, size, speed);
-      this.spawnAsteroid(pos2, size, speed);
-    }
-
-    //Spawn asteroids if there are no more asteroids and go to next level
-
-    if (noMoreAsteroids) {
-      this.level++;
-      for (let i = 0; i < this.level; i++) {
-        let position = createVector(random(windowWidth), random(windowHeight));
-        this.spawnAsteroid(
-          position,
-          this.AsteroidSize.LARGE,
-          this.AsteroidSpeed.LARGE
-        );
-      }
-    }
-    console.log(noMoreAsteroids);
   }
 
   processInput() {
@@ -279,17 +133,17 @@ class GameManager {
     //'W' is pressed
     if (keyIsDown(87) || keyIsDown(38)) {
       this.ship.thrustForward();
-      this.Sound.THRUST.play();
+      this.Sounds.THRUST.play();
     } else {
       this.ship.setIsMovingForward(false);
-      this.Sound.THRUST.stop();
+      this.Sounds.THRUST.stop();
     }
 
     //'S' is pressed
     if ((keyIsDown(83) || keyIsDown(40)) && !this.ship.getTeleportActive()) {
       this.ship.teleport();
-      this.Sound.TELEPORT.stop();
-      this.Sound.TELEPORT.play();
+      this.Sounds.TELEPORT.stop();
+      this.Sounds.TELEPORT.play();
     }
 
     //Space Bar is pressed
@@ -297,8 +151,8 @@ class GameManager {
       this.spaceDown = true;
 
       this.spawnBullet();
-      this.Sound.SHOOT.stop();
-      this.Sound.SHOOT.play();
+      this.Sounds.SHOOT.stop();
+      this.Sounds.SHOOT.play();
     } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
       this.spaceDown = false;
     }
@@ -408,6 +262,6 @@ class GameManager {
       windowWidth / 2,
       windowHeight / 2 + scoreTextOffset
     );
-    this.Sound.THRUST.stop();
+    this.Sounds.THRUST.stop();
   }
 }
