@@ -45,6 +45,28 @@ class CollisionHandler {
         );
       }
     }
+
+    //Check collision for the saucers
+    for (let i = 0; i < this.gameManager.saucers.length; i++) {
+      //With the ship bullets
+      for (let j = 0; j < this.gameManager.shipBullets.length; j++) {
+        this.handleCollision(
+          this.gameManager.saucers[i],
+          this.gameManager.shipBullets[j]
+        );
+      }
+
+      //With the ship
+      this.handleCollision(this.gameManager.ship, this.gameManager.saucers[i]);
+    }
+
+    //Check the collision between ship and saucer bullets
+    for (let i = 0; i < this.gameManager.saucerBullets.length; i++) {
+      this.handleCollision(
+        this.gameManager.ship,
+        this.gameManager.saucerBullets[i]
+      );
+    }
   }
 
   handleCollision(thisActor, otherActor) {
@@ -66,6 +88,17 @@ class CollisionHandler {
       let thisIsShip =
         this.gameManager.ship === thisActor && !thisActor.getInvincible();
       let thisIsSaucer = this.gameManager.saucers.includes(thisActor);
+
+      //Check if other actor is a saucer bullet
+      if (this.gameManager.saucerBullets.includes(otherActor)) {
+        this.destroyItemFromArray(otherActor, this.gameManager.saucerBullets);
+      }
+
+      //Check if other actor is a ship bullet
+      if (this.gameManager.shipBullets.includes(otherActor)) {
+        this.destroyItemFromArray(otherActor, this.gameManager.shipBullets);
+      }
+      //this.
 
       //Check if this actor is a vulnerable ship or bullet, and if the other actor is an asteroid
       if (otherIsAsteroid && (thisIsBullet || thisIsShip || thisIsSaucer)) {
@@ -146,6 +179,12 @@ class CollisionHandler {
       if (this.gameManager.shipBullets.includes(thisActor)) {
         //Destroy the ship bullet
         this.destroyItemFromArray(thisActor, this.gameManager.shipBullets);
+      }
+
+      //If this actor is a saucer
+      if (this.gameManager.saucers.includes(thisActor)) {
+        //Destroy the saucer
+        this.destroyItemFromArray(thisActor, this.gameManager.saucers);
       }
 
       //If this actor is a saucer bullet
