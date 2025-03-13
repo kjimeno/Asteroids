@@ -34,6 +34,7 @@ class GameManager {
       TELEPORT: createAudio("assets/sfx/teleport.mp3"),
       THRUST: createAudio("assets/sfx/thrust.mp3"),
       SAUCER_APPEAR: createAudio("assets/sfx/saucer-appear.mp3"),
+      SAUCER_EXPLODE: createAudio("assets/sfx/saucer-explode.mp3"),
     };
   }
 

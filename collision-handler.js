@@ -219,6 +219,11 @@ class CollisionHandler {
         this.gameManager.score - this.gameManager.lastScoreSmallSaucer >=
         this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE
       ) {
+        //Appearing Saucer SFX
+        this.gameManager.Sounds.SAUCER_APPEAR.stop();
+        this.gameManager.Sounds.SAUCER_APPEAR.play();
+
+        //Spawn Saucer
         this.gameManager.lastScoreSmallSaucer +=
           this.gameManager.SPAWN_SMALL_SAUCER_MILESTONE;
         this.gameManager.spawnSaucer(this.SaucerSize.SMALL);
@@ -226,6 +231,11 @@ class CollisionHandler {
         this.gameManager.score - this.gameManager.lastScoreBigSaucer >=
         this.gameManager.SPAWN_BIG_SAUCER_MILESTONE
       ) {
+        //Appearing Saucer SFX
+        this.gameManager.Sounds.SAUCER_APPEAR.stop();
+        this.gameManager.Sounds.SAUCER_APPEAR.play();
+
+        //Spawn Saucer
         this.gameManager.lastScoreBigSaucer +=
           this.gameManager.SPAWN_BIG_SAUCER_MILESTONE;
         this.gameManager.spawnSaucer(this.SaucerSize.LARGE);
@@ -233,6 +243,8 @@ class CollisionHandler {
 
       //If this actor is a saucer
       if (this.gameManager.saucers.includes(thisActor)) {
+        this.gameManager.Sounds.SAUCER_EXPLODE.stop();
+        this.gameManager.Sounds.SAUCER_EXPLODE.play();
         //Destroy the saucer
         this.destroyItemFromArray(thisActor, this.gameManager.saucers);
 
