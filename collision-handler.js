@@ -13,7 +13,9 @@ class CollisionHandler {
   }
 
   update() {
+    //Check collision for the asteroids
     for (let i = 0; i < this.gameManager.asteroids.length; i++) {
+      //With the ship bullets
       for (let j = 0; j < this.gameManager.shipBullets.length; j++) {
         this.handleCollision(
           this.gameManager.shipBullets[j],
@@ -21,10 +23,19 @@ class CollisionHandler {
         );
       }
 
+      //With the ship
       this.handleCollision(
         this.gameManager.ship,
         this.gameManager.asteroids[i]
       );
+
+      //With the saucer bullets
+      for (let j = 0; j < this.gameManager.saucerBullets.length; j++) {
+        this.handleCollision(
+          this.gameManager.saucerBullets[j],
+          this.gameManager.asteroids[i]
+        );
+      }
     }
   }
 
@@ -51,10 +62,6 @@ class CollisionHandler {
       if (otherIsAsteroid && (thisIsBullet || thisIsShip)) {
         //Destroy the asteroid
         this.destroyItemFromArray(otherActor, this.gameManager.asteroids);
-
-        //Play explosion sound
-        this.gameManager.Sounds.EXPLODE.stop();
-        this.gameManager.Sounds.EXPLODE.play();
 
         //If the last asteroid just got destroyed, move to the next level
         if (
@@ -104,17 +111,23 @@ class CollisionHandler {
           this.gameManager.spawnAsteroid(pos2, size, speed);
         }
 
-        //Add to the total score
-        switch (otherActor.getSize()) {
-          case this.AsteroidSize.LARGE:
-            this.gameManager.score += this.AsteroidValue.LARGE;
-            break;
-          case this.AsteroidSize.MEDIUM:
-            this.gameManager.score += this.AsteroidValue.MEDIUM;
-            break;
-          case this.AsteroidSize.SMALL:
-            this.gameManager.score += this.AsteroidValue.SMALL;
-            break;
+        //Add to the total score if the asteroid collides with a ship bullet
+        if (this.gameManager.shipBullets.includes(thisActor)) {
+          switch (otherActor.getSize()) {
+            case this.AsteroidSize.LARGE:
+              this.gameManager.score += this.AsteroidValue.LARGE;
+              break;
+            case this.AsteroidSize.MEDIUM:
+              this.gameManager.score += this.AsteroidValue.MEDIUM;
+              break;
+            case this.AsteroidSize.SMALL:
+              this.gameManager.score += this.AsteroidValue.SMALL;
+              break;
+          }
+
+          //Play explosion sound
+          this.gameManager.Sounds.EXPLODE.stop();
+          this.gameManager.Sounds.EXPLODE.play();
         }
       }
 
@@ -124,6 +137,12 @@ class CollisionHandler {
       if (this.gameManager.shipBullets.includes(thisActor)) {
         //Destroy the ship bullet
         this.destroyItemFromArray(thisActor, this.gameManager.shipBullets);
+      }
+
+      //If this actor is a saucer bullet
+      if (this.gameManager.saucerBullets.includes(thisActor)) {
+        //Destroy the saucer bullet
+        this.destroyItemFromArray(thisActor, this.gameManager.saucerBullets);
       }
 
       //If this actor is the ship
