@@ -252,7 +252,7 @@ class CollisionHandler {
         //Destroy the saucer
         this.destroyItemFromArray(thisActor, this.gameManager.saucers);
 
-        //Add to the total score------------------------------------------------------------
+        //Add to the total score based on saucer size
         this.gameManager.score +=
           thisActor.getSize() === this.gameManager.SaucerSize.LARGE
             ? this.gameManager.SaucerValue.LARGE
