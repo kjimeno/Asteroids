@@ -172,7 +172,7 @@ class GameManager {
     const speed = 13;
     const position = this.ship.getBulletPosition();
     const rotation = this.ship.getRotation();
-    const lifeTime = 1000;
+    const lifeTime = 1500;
     //White
     const color = "white";
 
