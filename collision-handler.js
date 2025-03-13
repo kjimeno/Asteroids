@@ -36,6 +36,14 @@ class CollisionHandler {
           this.gameManager.asteroids[i]
         );
       }
+
+      //With the saucers
+      for (let j = 0; j < this.gameManager.saucers.length; j++) {
+        this.handleCollision(
+          this.gameManager.saucers[j],
+          this.gameManager.asteroids[i]
+        );
+      }
     }
   }
 
@@ -57,9 +65,10 @@ class CollisionHandler {
         this.gameManager.saucerBullets.includes(thisActor);
       let thisIsShip =
         this.gameManager.ship === thisActor && !thisActor.getInvincible();
+      let thisIsSaucer = this.gameManager.saucers.includes(thisActor);
 
       //Check if this actor is a vulnerable ship or bullet, and if the other actor is an asteroid
-      if (otherIsAsteroid && (thisIsBullet || thisIsShip)) {
+      if (otherIsAsteroid && (thisIsBullet || thisIsShip || thisIsSaucer)) {
         //Destroy the asteroid
         this.destroyItemFromArray(otherActor, this.gameManager.asteroids);
 
@@ -143,6 +152,12 @@ class CollisionHandler {
       if (this.gameManager.saucerBullets.includes(thisActor)) {
         //Destroy the saucer bullet
         this.destroyItemFromArray(thisActor, this.gameManager.saucerBullets);
+      }
+
+      //If this actor is a saucer
+      if (this.gameManager.saucers.includes(thisActor)) {
+        //Destroy the saucer
+        this.destroyItemFromArray(thisActor, this.gameManager.saucers);
       }
 
       //If this actor is the ship
