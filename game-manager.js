@@ -4,6 +4,7 @@ class GameManager {
     this.numSaucers = numSaucers;
     this.score;
     this.level;
+    this.gameStarted = false;
     this.numLives;
     this.asteroids = [];
     this.ship;
@@ -63,6 +64,12 @@ class GameManager {
   }
 
   update() {
+    if (!this.gameStarted) {
+      this.displayTitleScreen();
+      this.processSpace();
+      return;
+    }
+
     if (this.gameIsOver) {
       this.displayGameOverScreen();
       return;
@@ -155,7 +162,18 @@ class GameManager {
     }
 
     //Space Bar is pressed
+    this.processSpace();
+  }
+
+  //Process the space bar
+  processSpace() {
     if (keyIsDown(32) && !this.ship.getTeleportActive() && !this.spaceDown) {
+      //If the game hasn't started, start the game (used for the title screen)
+      if (!this.gameStarted) {
+        this.gameStarted = true;
+        return;
+      }
+
       this.spaceDown = true;
 
       this.spawnBullet();
@@ -257,6 +275,13 @@ class GameManager {
       windowWidth / 2,
       windowHeight - offsetFromEdge
     );
+  }
+
+  //Display the title screen
+  displayTitleScreen() {
+    fill(255);
+    textSize(60);
+    text("Press [Space] to Start", windowWidth / 2, windowHeight / 2);
   }
 
   //Displays the game over screen and the score
