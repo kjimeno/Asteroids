@@ -49,7 +49,7 @@ class GameManager {
     this.music.loop();
 
     //Game properties set to beginning properties
-    this.score = 0;
+    this.score = 1450;
     this.level = 1;
     this.numLives = 3;
     this.gameIsOver = false;
@@ -122,7 +122,7 @@ class GameManager {
 
     //Saucers
     for (let i = 0; i < this.saucers.length; i++) {
-      this.saucers[i].update();
+      this.saucers[i].update(this.asteroids);
       this.saucers[i].display();
 
       if (this.saucers[i].getReadyToShoot()) {

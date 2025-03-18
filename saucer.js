@@ -17,6 +17,20 @@ class Saucer extends Actor {
     this.MAX_AIM_OFFSET = 2;
     this.SMALL_INSANE_AIM_SCORE = 4400;
     this.FORECAST_AIM = 30;
+
+    //
+    this.timer = 0;
+    this.enginePower = 0.07;
+    this.velocity = createVector(0, 0);
+    this.direction = createVector(0, 0);
+    this.dragForce = 0.97;
+
+    this.upForce = 0;
+    this.downForce = 0;
+    this.rightForce = 0;
+    this.leftForce = 0;
+
+    this.radarLength = 200;
   }
 
   setupShape() {
@@ -33,11 +47,56 @@ class Saucer extends Actor {
     this.vertices.push(createVector(this.size / 3, -this.size / 2));
   }
 
-  update() {
-    this.position.x += this.moveSpeedX;
+  update(asteroids) {
+    //Large Saucer Update
+    if (this.size === this.Sizes.LARGE) {
+      this.position.x += this.moveSpeedX;
 
-    let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
-    this.position.y = this.initialPos.y + deltaY;
+      let deltaY = sin(frameCount * this.moveSpeedY) * this.maxYOffset;
+      this.position.y = this.initialPos.y + deltaY;
+    }
+    //Small Saucer Update
+    else {
+      this.timer += deltaTime * 0.001;
+
+      this.upForce = round(noise(this.timer));
+      this.downForce = round(noise(this.timer + 1));
+      this.rightForce = round(noise(this.timer + 2));
+      this.leftForce = round(noise(this.timer + 3));
+
+      //------------------------------------------------------
+      for (let i = 0; i < asteroids.length; i++) {
+        if (this.position.dist(asteroids[i].position) <= this.radarLength) {
+          //Handle the X Position
+          if (this.position.x - asteroids[i].position.x > 0) {
+            this.rightForce = 1;
+            this.leftForce = 0;
+          } else {
+            this.rightForce = 0;
+            this.leftForce = 1;
+          }
+
+          //Handle the Y Position
+          if (this.position.y - asteroids[i].position.y > 0) {
+            this.upForce = 1;
+            this.downForce = 0;
+          } else {
+            this.upForce = 0;
+            this.downForce = 1;
+          }
+        }
+      }
+      //------------------------------------------------------
+
+      let resultForce = createVector(
+        (this.rightForce - this.leftForce) * this.enginePower,
+        (this.downForce - this.upForce) * this.enginePower
+      );
+
+      this.velocity.add(resultForce);
+      this.velocity.mult(this.dragForce);
+      this.position.add(this.velocity);
+    }
 
     //Update the fire rate timer
     this.shootTimer += deltaTime;
@@ -55,6 +114,21 @@ class Saucer extends Actor {
     translate(this.position);
 
     fill(0);
+
+    //-------------------------------------
+    push();
+
+    const thrustSize = createVector(3, 15);
+
+    stroke("cyan");
+    ellipse(-this.rightForce * 23, 0, thrustSize.x, thrustSize.y);
+    ellipse(this.leftForce * 23, 0, thrustSize.x, thrustSize.y);
+    ellipse(0, this.upForce * 15, thrustSize.y, thrustSize.x);
+    ellipse(0, -this.downForce * 15, thrustSize.y, thrustSize.x);
+
+    pop();
+    //---------------------------------------
+
     stroke(255);
 
     circle(0, 0, this.size);
