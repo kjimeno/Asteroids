@@ -199,7 +199,7 @@ class CollisionHandler {
           .dist(thisActor.getPosition());
         let collideDist = thisActor.getSize() / 2 + otherActor.getSize() / 2;
 
-        //If the ship is actually colliding with the other actor
+        //If the ship is actually colliding withwindowHeight * 0.2 the other actor
         if (distBetween <= collideDist && !thisActor.getInvincible()) {
           //Reduce the number of lives
           this.gameManager.numLives--;

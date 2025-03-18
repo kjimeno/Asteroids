@@ -40,6 +40,8 @@ class GameManager {
   }
 
   startGame() {
+    cursor(ARROW);
+
     //Loop the music
     this.music.loop();
 
@@ -48,6 +50,12 @@ class GameManager {
     this.level = 1;
     this.numLives = 3;
     this.gameIsOver = false;
+
+    //Reset all the arrays
+    this.saucers = [];
+    this.saucerBullets = [];
+    this.asteroids = [];
+    this.shipBullets = [];
 
     this.spawnShip();
 
@@ -175,7 +183,11 @@ class GameManager {
   processClick() {
     if (mouseIsPressed && !this.gameStarted) {
       this.gameStarted = true;
-      cursor(ARROW);
+      this.startGame();
+
+      //If the game started already, go back to main menu
+    } else if (mouseIsPressed) {
+      this.gameStarted = false;
     }
   }
 
@@ -277,21 +289,33 @@ class GameManager {
     //Title text block
     fill(255);
     textSize(60);
-    text("ASTEROIDS", windowWidth / 2, windowHeight / 2);
+    text("ASTEROIDS", windowWidth / 2, windowHeight * 0.1);
 
     //Title screen start button
     //Properties
-    const buttonWidth = 500;
+    const buttonWidth = 300;
     const buttonHeight = 70;
-    const buttonOffsetY = 100;
+    const buttonPosY = windowHeight * 0.85;
+    const buttonText = "START";
+    const buttonTextSize = 30;
 
+    this.drawButton(
+      buttonWidth,
+      buttonHeight,
+      buttonPosY,
+      buttonText,
+      buttonTextSize
+    );
+  }
+
+  drawButton(buttonWidth, buttonHeight, btnPosY, textContent, textSizing) {
     let withinX =
       mouseX >= windowWidth / 2 - buttonWidth / 2 &&
       mouseX <= windowWidth / 2 + buttonWidth / 2;
 
     let withinY =
-      mouseY >= windowHeight / 2 - buttonHeight / 2 + buttonOffsetY &&
-      mouseY <= windowHeight / 2 + buttonHeight / 2 + buttonOffsetY;
+      mouseY >= btnPosY - buttonHeight / 2 &&
+      mouseY <= btnPosY + buttonHeight / 2;
 
     let btnHoverColor = 0;
 
@@ -311,33 +335,47 @@ class GameManager {
     strokeWeight(3);
 
     //Draw the button
-    rect(
-      windowWidth / 2,
-      windowHeight / 2 + buttonOffsetY,
-      buttonWidth,
-      buttonHeight
-    );
+    rect(windowWidth / 2, btnPosY, buttonWidth, buttonHeight);
 
     pop();
 
     //Draw the button text block
-    textSize(30);
-    text("CLICK TO START", windowWidth / 2, windowHeight / 2 + buttonOffsetY);
+    textSize(textSizing);
+    text(textContent, windowWidth / 2, btnPosY);
   }
 
   //Displays the game over screen and the score
   displayGameOverScreen() {
     let scoreTextOffset = 50;
+    let replayBtnPosY = windowHeight * 0.6;
+    let replayBtnWidth = 300;
+    let replayBtnHeight = 70;
+    let replayText = "MAIN MENU";
+    let replayTextSize = 30;
 
+    //Game over text block
     fill(255);
     textSize(60);
-    text("GAME OVER!", windowWidth / 2, windowHeight / 2);
-    textSize(20);
+    text("GAME OVER!", windowWidth / 2, windowHeight * 0.4);
+
+    //Score text block
+    textSize(30);
     text(
       "YOUR TOTAL SCORE: " + this.score,
       windowWidth / 2,
-      windowHeight / 2 + scoreTextOffset
+      windowHeight * 0.4 + scoreTextOffset
     );
+
+    //Stop the thrusting sound
     this.Sounds.THRUST.stop();
+
+    //Replay button
+    this.drawButton(
+      replayBtnWidth,
+      replayBtnHeight,
+      replayBtnPosY,
+      replayText,
+      replayTextSize
+    );
   }
 }

@@ -12,7 +12,6 @@ function setup() {
   rectMode(CENTER);
 
   gameManager = new GameManager(0);
-  gameManager.startGame();
 }
 
 function draw() {
