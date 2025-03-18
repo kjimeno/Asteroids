@@ -40,6 +40,9 @@ class GameManager {
   }
 
   startGame() {
+    //Starting amount of asteroids
+    const initNumAsteroids = 3;
+
     cursor(ARROW);
 
     //Loop the music
@@ -61,7 +64,7 @@ class GameManager {
 
     this.collisionHandler = new CollisionHandler(this);
 
-    for (let i = 0; i < this.level; i++) {
+    for (let i = 1; i < this.level + initNumAsteroids; i++) {
       let position = createVector(random(windowWidth), random(windowHeight));
       this.spawnAsteroid(
         position,
