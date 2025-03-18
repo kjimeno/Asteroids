@@ -64,7 +64,21 @@ class Saucer extends Actor {
       this.rightForce = round(noise(this.timer + 2));
       this.leftForce = round(noise(this.timer + 3));
 
-      //------------------------------------------------------
+      //------------------------------------------------------------------------
+      let detectX = asteroids[i].position.x + windowWidth;
+      //asteroid.x + windowWidth - position.x <= radar
+      //move left
+
+      //windowWidth - asteroid.x  + position.x <= radar
+      //move right
+
+      //windowHeight - position.y + asteroid.y <= radar
+      //move up
+
+      //windowHeight - asteroid.y + position.y <= radar
+      //move down
+      //---------------------------------------------------------------------
+
       for (let i = 0; i < asteroids.length; i++) {
         if (this.position.dist(asteroids[i].position) <= this.radarLength) {
           //Handle the X Position
