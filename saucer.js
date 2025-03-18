@@ -64,43 +64,66 @@ class Saucer extends Actor {
       this.rightForce = round(noise(this.timer + 2));
       this.leftForce = round(noise(this.timer + 3));
 
-      //------------------------------------------------------------------------
-      let detectX = asteroids[i].position.x + windowWidth;
-      //asteroid.x + windowWidth - position.x <= radar
-      //move left
-
-      //windowWidth - asteroid.x  + position.x <= radar
-      //move right
-
-      //windowHeight - position.y + asteroid.y <= radar
-      //move up
-
-      //windowHeight - asteroid.y + position.y <= radar
-      //move down
       //---------------------------------------------------------------------
 
-      for (let i = 0; i < asteroids.length; i++) {
-        if (this.position.dist(asteroids[i].position) <= this.radarLength) {
-          //Handle the X Position
-          if (this.position.x - asteroids[i].position.x > 0) {
-            this.rightForce = 1;
-            this.leftForce = 0;
-          } else {
-            this.rightForce = 0;
-            this.leftForce = 1;
-          }
+      let closestAsteroid = asteroids[0];
+      let closestDist = 1000;
+      let asIdx = 0;
 
-          //Handle the Y Position
-          if (this.position.y - asteroids[i].position.y > 0) {
-            this.upForce = 1;
-            this.downForce = 0;
-          } else {
-            this.upForce = 0;
-            this.downForce = 1;
-          }
+      for (let i = 0; i < asteroids.length; i++) {
+        let directDistX = abs(this.position.x - asteroids[i].position.x);
+        let wrapDistX = windowWidth - directDistX;
+
+        let directDistY = abs(this.position.y - asteroids[i].position.y);
+        let wrapDistY = windowHeight - directDistY;
+
+        let closestX = wrapDistX < directDistX ? wrapDistX : directDistX;
+        let closestY = wrapDistY < directDistY ? wrapDistY : directDistY;
+
+        if (createVector(closestX, closestY).mag() <= closestDist) {
+          closestDist = createVector(closestX, closestY).mag();
+          closestAsteroid = asteroids[i];
+          asIdx = i;
         }
       }
+
+      console.log(closestDist);
       //------------------------------------------------------
+
+      //If within radar
+      if (this.position.dist(closestAsteroid.position) <= this.radarLength) {
+        //Moving Right
+        if (
+          this.position.x >= closestAsteroid.position.x ||
+          (windowWidth - closestAsteroid.position.x <= this.radarLength &&
+            this.position.x < closestAsteroid.position.x)
+        ) {
+          //Move right
+          this.leftForce = 0;
+          this.rightForce = 1;
+        } else {
+          //Move left
+          this.leftForce = 1;
+          this.rightForce = 0;
+        }
+
+        //Moving Down
+        if (
+          this.position.y >= closestAsteroid.position.y ||
+          (windowHeight - closestAsteroid.position.y <= this.radarLength &&
+            this.position.y < closestAsteroid.position.y)
+        ) {
+          //Move down
+          this.upForce = 0;
+          this.downForce = 1;
+        } else {
+          //Move up
+          this.upForce = 1;
+          this.downForce = 0;
+        }
+      }
+
+      //------------------------------
 
       let resultForce = createVector(
         (this.rightForce - this.leftForce) * this.enginePower,
@@ -135,6 +158,10 @@ class Saucer extends Actor {
     const thrustSize = createVector(3, 15);
 
     stroke("cyan");
+
+    //Debug the radar
+    circle(0, 0, this.radarLength * 2);
+
     ellipse(-this.rightForce * 23, 0, thrustSize.x, thrustSize.y);
     ellipse(this.leftForce * 23, 0, thrustSize.x, thrustSize.y);
     ellipse(0, this.upForce * 15, thrustSize.y, thrustSize.x);

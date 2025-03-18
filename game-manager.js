@@ -22,7 +22,7 @@ class GameManager {
     this.lastScoreBigSaucer = 0;
     this.lastScoreSmallSaucer = 0;
     this.ADD_LIFE_MILESTONE = 10000;
-    this.SPAWN_BIG_SAUCER_MILESTONE = 500;
+    this.SPAWN_BIG_SAUCER_MILESTONE = 700;
     this.SPAWN_SMALL_SAUCER_MILESTONE = 1500;
     this.gameIsOver = false;
     this.music = createAudio("assets/sfx/music.mp3");
@@ -49,7 +49,7 @@ class GameManager {
     this.music.loop();
 
     //Game properties set to beginning properties
-    this.score = 1450;
+    this.score = 1490;
     this.level = 1;
     this.numLives = 3;
     this.gameIsOver = false;
@@ -117,7 +117,7 @@ class GameManager {
     //Asteroids
     for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].update();
-      this.asteroids[i].display();
+      this.asteroids[i].display(i);
     }
 
     //Saucers
