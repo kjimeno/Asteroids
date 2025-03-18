@@ -66,7 +66,6 @@ class GameManager {
   update() {
     if (!this.gameStarted) {
       this.displayTitleScreen();
-      this.processSpace();
       return;
     }
 
@@ -161,19 +160,7 @@ class GameManager {
       this.Sounds.TELEPORT.play();
     }
 
-    //Space Bar is pressed
-    this.processSpace();
-  }
-
-  //Process the space bar
-  processSpace() {
     if (keyIsDown(32) && !this.ship.getTeleportActive() && !this.spaceDown) {
-      //If the game hasn't started, start the game (used for the title screen)
-      if (!this.gameStarted) {
-        this.gameStarted = true;
-        return;
-      }
-
       this.spaceDown = true;
 
       this.spawnBullet();
@@ -181,6 +168,14 @@ class GameManager {
       this.Sounds.SHOOT.play();
     } else if (!keyIsDown(32) && !this.ship.getTeleportActive()) {
       this.spaceDown = false;
+    }
+  }
+
+  //Processing mouse click
+  processClick() {
+    if (mouseIsPressed && !this.gameStarted) {
+      this.gameStarted = true;
+      cursor(ARROW);
     }
   }
 
@@ -279,9 +274,55 @@ class GameManager {
 
   //Display the title screen
   displayTitleScreen() {
+    //Title text block
     fill(255);
     textSize(60);
-    text("Press [Space] to Start", windowWidth / 2, windowHeight / 2);
+    text("ASTEROIDS", windowWidth / 2, windowHeight / 2);
+
+    //Title screen start button
+    //Properties
+    const buttonWidth = 500;
+    const buttonHeight = 70;
+    const buttonOffsetY = 100;
+
+    let withinX =
+      mouseX >= windowWidth / 2 - buttonWidth / 2 &&
+      mouseX <= windowWidth / 2 + buttonWidth / 2;
+
+    let withinY =
+      mouseY >= windowHeight / 2 - buttonHeight / 2 + buttonOffsetY &&
+      mouseY <= windowHeight / 2 + buttonHeight / 2 + buttonOffsetY;
+
+    let btnHoverColor = 0;
+
+    if (withinX && withinY) {
+      cursor(HAND);
+      //Grey
+      btnHoverColor = 50;
+      this.processClick();
+    } else {
+      cursor(ARROW);
+    }
+
+    push();
+
+    fill(btnHoverColor);
+    stroke(255);
+    strokeWeight(3);
+
+    //Draw the button
+    rect(
+      windowWidth / 2,
+      windowHeight / 2 + buttonOffsetY,
+      buttonWidth,
+      buttonHeight
+    );
+
+    pop();
+
+    //Draw the button text block
+    textSize(30);
+    text("CLICK TO START", windowWidth / 2, windowHeight / 2 + buttonOffsetY);
   }
 
   //Displays the game over screen and the score

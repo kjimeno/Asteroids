@@ -7,8 +7,9 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth * 0.99, windowHeight * 0.99);
-  textAlign(CENTER);
+  textAlign(CENTER, CENTER);
   textFont(font);
+  rectMode(CENTER);
 
   gameManager = new GameManager(0);
   gameManager.startGame();
