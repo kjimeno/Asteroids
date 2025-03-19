@@ -117,12 +117,12 @@ class GameManager {
     //Asteroids
     for (let i = 0; i < this.asteroids.length; i++) {
       this.asteroids[i].update();
-      this.asteroids[i].display(i);
+      this.asteroids[i].display();
     }
 
     //Saucers
     for (let i = 0; i < this.saucers.length; i++) {
-      this.saucers[i].update(this.asteroids, this.saucers);
+      this.saucers[i].update(this.asteroids, this.ship);
       this.saucers[i].display();
 
       if (this.saucers[i].getReadyToShoot()) {

@@ -47,7 +47,7 @@ class Saucer extends Actor {
     this.vertices.push(createVector(this.size / 3, -this.size / 2));
   }
 
-  update(asteroids, saucers) {
+  update(asteroids, ship) {
     //Large Saucer Update
     if (this.size === this.Sizes.LARGE) {
       this.position.x += this.moveSpeedX;
@@ -68,7 +68,6 @@ class Saucer extends Actor {
 
       let closestObject = asteroids[0];
       let closestDist = 1000;
-      let asIdx = 0;
 
       //Check distance for every asteroid
       for (let i = 0; i < asteroids.length; i++) {
@@ -84,36 +83,24 @@ class Saucer extends Actor {
         if (createVector(closestX, closestY).mag() <= closestDist) {
           closestDist = createVector(closestX, closestY).mag();
           closestObject = asteroids[i];
-          asIdx = i;
         }
       }
 
-      print(closestDist);
-      print(asIdx);
-      /*
-      //Check distance for every saucer
-      for (let i = 0; i < saucers.length; i++) {
-        let thisIndex = saucers.indexOf(this);
+      //Check distance for ship
+      let directDistX = abs(this.position.x - ship.position.x);
+      let wrapDistX = windowWidth - directDistX;
 
-        if (i === thisIndex) {
-          break;
-        }
+      let directDistY = abs(this.position.y - ship.position.y);
+      let wrapDistY = windowHeight - directDistY;
 
-        let directDistX = abs(this.position.x - saucers[i].position.x);
-        let wrapDistX = windowWidth - directDistX;
+      let closestX = wrapDistX < directDistX ? wrapDistX : directDistX;
+      let closestY = wrapDistY < directDistY ? wrapDistY : directDistY;
 
-        let directDistY = abs(this.position.y - saucers[i].position.y);
-        let wrapDistY = windowHeight - directDistY;
-
-        let closestX = wrapDistX < directDistX ? wrapDistX : directDistX;
-        let closestY = wrapDistY < directDistY ? wrapDistY : directDistY;
-
-        if (createVector(closestX, closestY).mag() <= closestDist) {
-          closestDist = createVector(closestX, closestY).mag();
-          closestObject = saucers[i];
-        }
+      if (createVector(closestX, closestY).mag() <= closestDist) {
+        closestDist = createVector(closestX, closestY).mag();
+        closestObject = ship;
       }
-*/
+
       //If within radar
       if (closestDist <= this.radarLength) {
         //Handling horizontal force
