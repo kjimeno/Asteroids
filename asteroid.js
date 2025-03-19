@@ -25,7 +25,7 @@ class Asteroid extends Actor {
     }
   }
 
-  display() {
+  display(index) {
     push();
     translate(this.position);
 
@@ -38,6 +38,8 @@ class Asteroid extends Actor {
       vertex(this.vertices[i].x, this.vertices[i].y);
     }
     endShape(CLOSE);
+
+    text(index, 0, 0);
 
     pop();
   }

@@ -30,7 +30,7 @@ class Saucer extends Actor {
     this.rightForce = 0;
     this.leftForce = 0;
 
-    this.radarLength = 200;
+    this.radarLength = 150;
   }
 
   setupShape() {
@@ -68,6 +68,7 @@ class Saucer extends Actor {
 
       let closestObject = asteroids[0];
       let closestDist = 1000;
+      let asIdx = 0;
 
       //Check distance for every asteroid
       for (let i = 0; i < asteroids.length; i++) {
@@ -83,9 +84,13 @@ class Saucer extends Actor {
         if (createVector(closestX, closestY).mag() <= closestDist) {
           closestDist = createVector(closestX, closestY).mag();
           closestObject = asteroids[i];
+          asIdx = i;
         }
       }
 
+      print(closestDist);
+      print(asIdx);
+      /*
       //Check distance for every saucer
       for (let i = 0; i < saucers.length; i++) {
         let thisIndex = saucers.indexOf(this);
@@ -108,39 +113,60 @@ class Saucer extends Actor {
           closestObject = saucers[i];
         }
       }
-
+*/
       //If within radar
-      if (this.position.dist(closestObject.position) <= this.radarLength) {
+      if (closestDist <= this.radarLength) {
         //Handling horizontal force
-        if (
-          this.position.x >= closestObject.position.x ||
-          (windowWidth - closestObject.position.x <= this.radarLength &&
-            this.position.x < closestObject.position.x)
-        ) {
-          //Move right
+
+        let rightOfObject =
+          this.position.x >= closestObject.position.x &&
+          this.position.x - closestObject.position.x <= this.radarLength;
+
+        let leftOfObject =
+          this.position.x < closestObject.position.x &&
+          windowWidth - closestObject.position.x + this.position.x <=
+            this.radarLength;
+
+        //Move right
+        if (rightOfObject || leftOfObject) {
           this.leftForce = 0;
           this.rightForce = 1;
-        } else {
-          //Move left
+        }
+        //Move left
+        else {
           this.leftForce = 1;
           this.rightForce = 0;
         }
 
         //Handling vertical force
-        if (
-          this.position.y >= closestObject.position.y ||
-          (windowHeight - closestObject.position.y <= this.radarLength &&
-            this.position.y < closestObject.position.y)
-        ) {
-          //Move down
+        let belowObject =
+          this.position.y >= closestObject.position.y &&
+          this.position.y - closestObject.position.y <= this.radarLength;
+
+        let aboveObject =
+          this.position.y < closestObject.position.y &&
+          windowHeight - closestObject.position.y + this.position.y <=
+            this.radarLength;
+
+        //Move down
+        if (belowObject || aboveObject) {
           this.upForce = 0;
           this.downForce = 1;
-        } else {
-          //Move up
+        }
+        //Move up
+        else {
           this.upForce = 1;
           this.downForce = 0;
         }
       }
+
+      if (
+        this.upForce === 0 &&
+        this.downForce === 0 &&
+        this.leftForce === 0 &&
+        this.rightForce === 0
+      )
+        this.upForce = 1;
 
       let resultForce = createVector(
         (this.rightForce - this.leftForce) * this.enginePower,
@@ -177,7 +203,7 @@ class Saucer extends Actor {
     stroke("cyan");
 
     //Debug the radar
-    circle(0, 0, this.radarLength * 2);
+    //circle(0, 0, this.radarLength * 2);
 
     ellipse(-this.rightForce * 23, 0, thrustSize.x, thrustSize.y);
     ellipse(this.leftForce * 23, 0, thrustSize.x, thrustSize.y);

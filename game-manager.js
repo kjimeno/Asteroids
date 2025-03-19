@@ -41,7 +41,7 @@ class GameManager {
 
   startGame() {
     //Starting amount of asteroids
-    const initNumAsteroids = 3;
+    const initNumAsteroids = 7;
 
     cursor(ARROW);
 
@@ -51,7 +51,7 @@ class GameManager {
     //Game properties set to beginning properties
     this.score = 1490;
     this.level = 1;
-    this.numLives = 3;
+    this.numLives = 10;
     this.gameIsOver = false;
 
     //Reset all the arrays
