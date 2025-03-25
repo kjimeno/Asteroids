@@ -18,7 +18,6 @@ class Saucer extends Actor {
     this.SMALL_INSANE_AIM_SCORE = 4400;
     this.FORECAST_AIM = 30;
 
-    //
     this.timer = 0;
     this.enginePower = 0.07;
     this.velocity = createVector(0, 0);

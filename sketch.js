@@ -11,7 +11,7 @@ function setup() {
   textFont(font);
   rectMode(CENTER);
 
-  gameManager = new GameManager(0);
+  gameManager = new GameManager();
 }
 
 function draw() {

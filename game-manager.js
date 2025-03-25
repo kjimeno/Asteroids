@@ -1,7 +1,7 @@
 class GameManager {
-  constructor(numSaucers) {
+  constructor() {
     this.collisionHandler;
-    this.numSaucers = numSaucers;
+    this.uiHandler = new UIHandler();
     this.score;
     this.level;
     this.gameStarted = false;
@@ -76,12 +76,16 @@ class GameManager {
 
   update() {
     if (!this.gameStarted) {
-      this.displayTitleScreen();
+      this.uiHandler.displayTitleScreen(this);
       return;
     }
 
     if (this.gameIsOver) {
-      this.displayGameOverScreen();
+      this.uiHandler.displayGameOverScreen(
+        this.score,
+        this.Sounds.THRUST,
+        this
+      );
       return;
     }
 
@@ -141,7 +145,7 @@ class GameManager {
     this.collisionHandler.update();
 
     //HUD
-    this.displayHUD();
+    this.uiHandler.displayHUD(this.score, this.level, this.numLives);
   }
 
   processInput() {
@@ -264,121 +268,5 @@ class GameManager {
 
     //Add to the Asteroids Array
     this.asteroids.push(asteroid);
-  }
-
-  //Displays the player's score and the number of lives left
-  displayHUD() {
-    const offsetFromEdge = 50;
-
-    fill(255);
-    textSize(20);
-
-    //Score Text (Displayed at the top-left)
-    text("SCORE: " + this.score, windowWidth * 0.1, offsetFromEdge);
-
-    //Level Text (Displayed at the top-right)
-    text("LEVEL: " + this.level, windowWidth * 0.9, offsetFromEdge);
-
-    //Number of Lives Text
-    text(
-      "NUMBER OF LIVES: " + this.numLives,
-      windowWidth / 2,
-      windowHeight - offsetFromEdge
-    );
-  }
-
-  //Display the title screen
-  displayTitleScreen() {
-    //Title text block
-    fill(255);
-    textSize(60);
-    text("ASTEROIDS", windowWidth / 2, windowHeight * 0.1);
-
-    //Title screen start button
-    //Properties
-    const buttonWidth = 300;
-    const buttonHeight = 70;
-    const buttonPosY = windowHeight * 0.85;
-    const buttonText = "START";
-    const buttonTextSize = 30;
-
-    this.drawButton(
-      buttonWidth,
-      buttonHeight,
-      buttonPosY,
-      buttonText,
-      buttonTextSize
-    );
-  }
-
-  drawButton(buttonWidth, buttonHeight, btnPosY, textContent, textSizing) {
-    let withinX =
-      mouseX >= windowWidth / 2 - buttonWidth / 2 &&
-      mouseX <= windowWidth / 2 + buttonWidth / 2;
-
-    let withinY =
-      mouseY >= btnPosY - buttonHeight / 2 &&
-      mouseY <= btnPosY + buttonHeight / 2;
-
-    let btnHoverColor = 0;
-
-    if (withinX && withinY) {
-      cursor(HAND);
-      //Grey
-      btnHoverColor = 50;
-      this.processClick();
-    } else {
-      cursor(ARROW);
-    }
-
-    push();
-
-    fill(btnHoverColor);
-    stroke(255);
-    strokeWeight(3);
-
-    //Draw the button
-    rect(windowWidth / 2, btnPosY, buttonWidth, buttonHeight);
-
-    pop();
-
-    //Draw the button text block
-    textSize(textSizing);
-    text(textContent, windowWidth / 2, btnPosY);
-  }
-
-  //Displays the game over screen and the score
-  displayGameOverScreen() {
-    let scoreTextOffset = 50;
-    let replayBtnPosY = windowHeight * 0.6;
-    let replayBtnWidth = 300;
-    let replayBtnHeight = 70;
-    let replayText = "MAIN MENU";
-    let replayTextSize = 30;
-
-    //Game over text block
-    fill(255);
-    textSize(60);
-    text("GAME OVER!", windowWidth / 2, windowHeight * 0.4);
-
-    //Score text block
-    textSize(30);
-    text(
-      "YOUR TOTAL SCORE: " + this.score,
-      windowWidth / 2,
-      windowHeight * 0.4 + scoreTextOffset
-    );
-
-    //Stop the thrusting sound
-    this.Sounds.THRUST.stop();
-
-    //Replay button
-    this.drawButton(
-      replayBtnWidth,
-      replayBtnHeight,
-      replayBtnPosY,
-      replayText,
-      replayTextSize
-    );
   }
 }
